@@ -1,0 +1,65 @@
+import { req } from "@/api/axios";
+import { Event } from "@/types/Event";
+import { getCookie } from "cookies-next";
+// import { cookies } from "next/headers";
+
+// ADMINISTRACAO
+// ********post('/login', auth.login);
+// ********get('/ping', auth.validate, (req, res) => { res.json({pong: true, admin: true})});
+export const login = 
+async (password: string): Promise<string | false> => {
+    try {
+        const json = await req.post('/admin/login', {password});
+        return json.data.token ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+
+// ADMINISTRACAO ---> EVENTS
+// router.get('/events', auth.validate, event.getAll);
+// router.get('/events/:id', auth.validate, event.getEvent);
+// router.post('/events', auth.validate, event.addEvent);
+// router.put('/events/:id', auth.validate, event.updateEvent);
+// router.delete('/events/:id', auth.validate, event.deleteEvent);
+export const getAdminEvents = 
+async (): Promise<Event[] | []> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.get('/admin/events/', {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return json.data.events as Event[] ?? [];
+    } catch (error) {
+        return [];
+    }
+}
+
+export const getAdminEvent = 
+async (id: number): Promise<Event | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.get('/admin/events/'+id, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return json.data.events as Event ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+// ADMINISTRACAO ---> GRUPOS
+// router.get('/groups/:id_event', auth.validate, group.getAll);
+// router.get('/groups/:id_event/:id_group', auth.validate, group.getGroup);
+// router.post('/groups/:id_event', auth.validate, group.addGroup);
+// router.put('/groups/:id_event/:id_group', auth.validate, group.updateGroup);
+// router.delete('/groups/:id_event/:id_group', auth.validate, group.deleteGroup);
+
+// PEOPLES
+// router.get('/peoples/group/:id_event/:id_group', auth.validate, people.getAll);
+// router.get('/peoples/event/:id_event', auth.validate, people.getAll);
+// router.get('/peoples/:id_event/:id_group/:id', auth.validate, people.getPeople);
+// router.get('/peoples/id/:id_event/:id', auth.validate, people.getPeople);
+// router.get('/peoples/cpf/:id_event/:cpf', auth.validate, people.getPeople);
+// router.post('/peoples/:id_event/:id_group', auth.validate, people.addPeople);
+// router.put('/peoples/:id_event/:id_group/:id', auth.validate, people.updatePeople);
+// router.delete('/peoples/:id_event/:id_group/:id', auth.validate, people.deletePeople);
