@@ -26,25 +26,21 @@ const Page = async ({params}: Props) => {
     if (!eventItem.status) return redirect('/');
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-20">
-            <Card className="flex items-center justify-between ">
-                <CardHeader className="outline-none">
-                    <Link href="/">
-                        <h1 className="text-xl text-red-200 font-semibold text-center">
-                            <span >Amigo</span> Secreto
-                        </h1>
-                    </Link>
+        <main className="flex min-h-screen flex-col items-center justify-between">
+            <Card className="w-full">
+                <CardHeader className="outline-none items-center">
+                    {/* <Link href="/"> */}
+                        {/* <h1 className="text-xl text-red-200 font-semibold text-center"> */}
+                            {/* <span >Amigo</span> Secreto */}
+                        {/* </h1> */}
+                    {/* </Link> */}
                     <CardTitle>{eventItem.title}</CardTitle>
                     <CardDescription>{eventItem.description}</CardDescription>
                 </CardHeader>
-                
-                
             </Card>
             <Card>
-                
-                    {/* <p>Home - Amigo Secreto</p> */}
-                    <Search id={eventItem.id}/>
-                
+                {/* <p>Home - Amigo Secreto</p> */}
+                <Search id={eventItem.id}/>
             </Card>
             <Card>
                 <CardFooter>
