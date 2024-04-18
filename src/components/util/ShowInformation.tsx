@@ -1,7 +1,8 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangleIcon } from "lucide-react";
+import { AlertTriangleIcon, LucideIcon } from "lucide-react";
 
 type Props = {
+    // IconElement: LucideIcon;
     message: string;
 }
 export const ShowInformation = ({message}: Props) => {
@@ -13,7 +14,7 @@ export const ShowInformation = ({message}: Props) => {
             <AlertTriangleIcon className="h-4 w-4" />
             <AlertTitle>Warning</AlertTitle>
             <AlertDescription>
-                Acesso Negado!!
+                {message}
             </AlertDescription>
         </Alert>
     );
