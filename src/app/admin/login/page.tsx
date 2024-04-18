@@ -1,7 +1,8 @@
 "use client"
 
 import { login } from "@/api/admin";
-import { ShowInformation } from "@/components/site/ShowInformation";
+import { ShowWarning } from "@/components/helpers/AlertHelpers";
+import { ButtonDisabled, ShowButtonSubmit } from "@/components/helpers/ButtonHelpers";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter } from "@/components/ui/card";
 import { 
@@ -102,30 +103,24 @@ const Page = () => {
                                     </FormItem>
                                 )}
                             />
-                            {loading && 
-                                <Button disabled>
-                                    <RotateCw className="mr-2 h-4 w-4 animate-spin" />
-                                    Please wait
-                                </Button>
-                            }
-                            {!loading &&
-                                <Button 
-                                    type="submit" 
-                                    variant="default" 
-                                    size="lg" 
-                                    className="w-full uppercase font-bold"
-                                >
-                                        Entrar
-                                </Button>
-                            }
-                            {/* <Button  */}
-                                {/* type="submit"  */}
-                                {/* variant="default"  */}
-                                {/* size="lg"  */}
-                                {/* disabled={loading} */}
-                                {/* className="w-full uppercase font-bold"> */}
-                                    {/* Entrar */}
-                            {/* </Button> */}
+                            {loading && <ButtonDisabled /> }
+                            {!loading && <ShowButtonSubmit label="Entrar" /> }
+                            {warning && <ShowWarning message="Acesso Negado!"/> }
+                            {/* {loading &&  */}
+                                {/* <Button disabled> */}
+                                    {/* <RotateCw className="mr-2 h-4 w-4 animate-spin" /> */}
+                                    {/* Please wait */}
+                                {/* </Button> */}
+                            {/* } */}
+                            {/* {!loading && */}
+                                {/* <Button  */}
+                                    {/* type="submit"  */}
+                                    {/* variant="default"  */}
+                                    {/* size="lg"  */}
+                                    {/* className="w-full uppercase font-bold"> */}
+                                        {/* Entrar */}
+                                {/* </Button> */}
+                            {/* } */}
                             {/* <Alert variant="destructive"> */}
                                 {/* <RocketIcon className="h-4 w-4" /> */}
                                 {/* <MessageSquareWarningIcon className="h-4 w-4" /> */}
@@ -136,9 +131,6 @@ const Page = () => {
                                     {/* Acesso Negado!! */}
                                 {/* </AlertDescription> */}
                             {/* </Alert> */}
-                            {warning && 
-                                <ShowInformation message="Acesso Negado!"/>
-                            }
                         </form>
                     </Form>
             </Card>

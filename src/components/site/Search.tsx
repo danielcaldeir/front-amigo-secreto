@@ -43,20 +43,39 @@ type Props = {
 export const Search = ({ id }: Props) => {
     const [result, setResult] = useState<ResultSearch>();
     const [loading, setLoading] = useState(false);
+    const [warning, setWarning] = useState(false);
+    const [info, setInfo] = useState(false);
 
     const handleSearchButton = async (cpf: string) => {
-        if (!cpf) return( alert('Nao foi informado um CPF'));
+        if (!cpf) {
+          setInfo(true);
+          // return ( alert('Nao foi informado um CPF'));
+        } else { 
+          setInfo(false); 
+        }
         setLoading(true);
         const cpfResult = await searchCPF(id, cpf);
         setLoading(false);
-        if (!cpfResult) return ( alert('Nao Encontramos o seu CPF') );
+        if (!cpfResult) {
+          setWarning(true);
+          // return ( alert('Nao Encontramos o seu CPF') );
+        } else {
+          setWarning(false);
+        }
 
         setResult(cpfResult);
     }
 
     return(
         <section className="bg-gray-900 p-5 rounded">
-            {!result && <SearchForm onSearchButton={handleSearchButton} loading={loading} />}
+            {!result && 
+              <SearchForm 
+                onSearchButton={handleSearchButton} 
+                loading={loading} 
+                warning={warning} 
+                info={info}
+              />
+            }
             {result && <SearchReveal result={result} />}
         </section>
     );
