@@ -1,0 +1,24 @@
+import { XCircleIcon, XSquareIcon } from "lucide-react";
+import { ReactNode } from "react";
+import { ItemButton } from "../helpers/ButtonHelpers";
+
+type Props = {
+    onClose: () => void;
+    children: ReactNode;
+}
+export const ModalDemo = ({ onClose, children }: Props) => {
+    return (
+        <div className="fixed left-0 right-0 top-0 bottom-0 
+                    bg-black/50 flex flex-col items-center overflow-y-auto">
+            <div className="w-full my-3 max-w-xl flex items-end justify-end">
+                <div className="w-8 h-8 rounded-full bg-gray-800 text-white text-lg flex 
+                        justify-center items-center cursor-pointer hover:bg-gray-500">
+                    <ItemButton IconElement={XCircleIcon} onClick={onClose}/>
+                </div>
+            </div>
+            <div className="bg-gray-800 w-full max-w-xl p-4 rounded-md mb-5">
+                {children}
+            </div>
+        </div>
+    );
+}
