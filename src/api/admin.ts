@@ -47,6 +47,36 @@ async (id: number): Promise<Event | false> => {
         return false;
     }
 }
+
+type AddEventData = {
+    title: string;
+    description: string;
+    grouped: boolean;
+}
+export const addAdminEvent = 
+async (data: AddEventData): Promise<Event | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.post('/admin/events/', data, 
+            { headers: {'Authorization': `Token ${token}`} });
+        return json.data.events as Event ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+
+export const deleteAdminEvent = 
+async (id: number): Promise<true | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.delete('/admin/events/'+id, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return !json.data.error;
+    } catch (error) {
+        return false;
+    }
+}
 // ADMINISTRACAO ---> GRUPOS
 // router.get('/groups/:id_event', auth.validate, group.getAll);
 // router.get('/groups/:id_event/:id_group', auth.validate, group.getGroup);

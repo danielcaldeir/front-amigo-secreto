@@ -1,37 +1,45 @@
 "use client";
 
-import { getAdminEvents } from "@/api/admin";
+import { getAdminEvent, getAdminEvents } from "@/api/admin";
 import { Event } from "@/types/Event";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
-  Table, 
-  TableBody, 
-  TableCaption, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { 
+  EventADD,
   EventItem, 
   EventItemNotFound, 
-  EventItemPhaceholder 
+  EventItemPhaceholder, 
+  OpenADDAlertDialog
 } from "@/components/admin/EventItem";
+import { PlusCircleIcon } from "lucide-react";
+import { ModalScreens } from "@/types/modalScreens";
 import { 
-  CircleFadingPlus, 
-  CircleFadingPlusIcon, 
-  LucideCircleFadingPlus, 
-  MessageCirclePlus, 
-  PlusCircleIcon 
-} from "lucide-react";
-import { ItemButton } from "@/components/util/ItemButton";
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogFooter, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger 
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, 
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, 
+  AlertDialogTitle, AlertDialogTrigger 
+} from "@/components/ui/alert-dialog";
+import { OpenModalAlertDialog } from "@/components/helpers/AlertDialogHelpers";
+import { ModalDemo } from "../util/ModalDemo";
+import { ItemButton } from "../helpers/ButtonHelpers";
 
 export const AdminPage = () => {
     const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState(true);
+    const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
 
     const loadEvents = async () => {
+        setModalScreen(null);
         setLoading(true);
         const eventList = await getAdminEvents();
         setEvents(eventList);
@@ -42,15 +50,44 @@ export const AdminPage = () => {
         loadEvents();
     },[]);
 
-    const handleSearchButton = async () => {
-      // (cpf: string)
-        // if (!cpf) return( alert('Nao foi informado um CPF'));
-        // setLoading(true);
-        // const cpfResult = await searchCPF(id, cpf);
-        // setLoading(false);
-        // if (!cpfResult) return ( alert('Nao Encontramos o seu CPF') );
-        // setResult(cpfResult);
-      return false;
+    // const openModalDialog = async () => {
+    //   return (
+    //     <Dialog>
+    //       <DialogTrigger asChild>
+    //         <Button variant="outline">Edit Profile</Button>
+    //       </DialogTrigger>
+    //       <DialogContent className="sm:max-w-[425px]">
+    //         <DialogHeader>
+    //           <DialogTitle>Edit profile</DialogTitle>
+    //           <DialogDescription>
+    //             Make changes to your profile here. Click save when you're done.
+    //           </DialogDescription>
+    //         </DialogHeader>
+    //         <div className="grid gap-4 py-4">
+    //           <div className="grid grid-cols-4 items-center gap-4">
+    //             <Label htmlFor="name" className="text-right">
+    //               Name
+    //             </Label>
+    //             <Input id="name" value="Pedro Duarte" className="col-span-3" />
+    //           </div>
+    //           <div className="grid grid-cols-4 items-center gap-4">
+    //             <Label htmlFor="username" className="text-right">
+    //               Username
+    //             </Label>
+    //             <Input id="username" value="@peduarte" className="col-span-3" />
+    //           </div>
+    //         </div>
+    //         <DialogFooter>
+    //           <Button type="submit">Save changes</Button>
+    //         </DialogFooter>
+    //       </DialogContent>
+    //     </Dialog>
+    //   )
+    // }
+
+    const handleADDEvent = () => {
+      // const ping = await getAdminEvent(2);
+      console.log("Click ADD Event: ");
     }
 
     return(
@@ -59,10 +96,12 @@ export const AdminPage = () => {
               <CardHeader className="p-3 flex flex-row items-center">
                 <CardTitle className="flex-1">Eventos</CardTitle>
                 {/* <PlusCircleIcon /> */}
-                <ItemButton 
-                  IconElement={PlusCircleIcon} 
-                  onClick={handleSearchButton}
-                />
+                {/* <OpenADDAlertDialog  */}
+                  {/* IconElement={PlusCircleIcon}  */}
+                  {/* onClick={ handleADDEvent }  */}
+                  {/* title="Criar um Novo Evento" */}
+                {/* /> */}
+                <ItemButton IconElement={PlusCircleIcon} label="" onClick={ () => setModalScreen('add') } />
               </CardHeader>
               
               {loading && <EventItemPhaceholder />}
@@ -77,32 +116,21 @@ export const AdminPage = () => {
                   ) 
                 }
               </CardContent>
-                {/* <Table> */}
-                  {/* <TableHeader> */}
-                    {/* <TableRow> */}
-                      {/* <TableHead>Eventos</TableHead> */}
-                      {/* <TableHead>Descrição</TableHead> */}
-                    {/* </TableRow> */}
-                  {/* </TableHeader> */}
-                  {/* <TableBody> */}
-                    {/* {!loading && events.length > 0 &&  */}
-                      {/* events.map( item =>  */}
-                        {/* [ */}
-                          {/* <TableRow> */}
-                            {/* <TableCell><div key={item.id}>{item.title}</div></TableCell> */}
-                            {/* <TableCell><div >{item.description}</div></TableCell> */}
-                          {/* </TableRow> */}
-                        {/* ] */}
-                      {/* )  */}
-                    {/* } */}
-                  {/* </TableBody> */}
-                {/* </Table> */}
                 {/* <Card>Eventos</Card> */}
                 {/* <Card> */}
                     {/* {loading && <div>Carregando ...</div>} */}
                     {/* {!loading && events.length > 0 && events.map( item => [<div key={item.id}>{item.title}</div>]) } */}
                     {/* {!loading && events.length == 0 && <CardTitle>Nao foi possivel carregar nenhum Evento</CardTitle>  } */}
                 {/* </Card> */}
+            </Card>
+            <Card>
+              {modalScreen && 
+                <ModalDemo onClose={ ()=>setModalScreen(null) } >
+                  {/* Tipo: {modalScreen} */}
+                  {modalScreen == 'add' && <EventADD refreshAction={loadEvents} />}
+                  {modalScreen == 'edit' && <div></div>}
+                </ModalDemo>
+              }
             </Card>
         </section>
     );
