@@ -61,9 +61,10 @@ export const Search = ({ id }: Props) => {
           // return ( alert('Nao Encontramos o seu CPF') );
         } else {
           setWarning(false);
+          setResult(cpfResult);
         }
 
-        setResult(cpfResult);
+        
     }
 
     return(
