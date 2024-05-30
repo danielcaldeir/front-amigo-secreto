@@ -93,3 +93,16 @@ async (id: number): Promise<true | false> => {
 // router.post('/peoples/:id_event/:id_group', auth.validate, people.addPeople);
 // router.put('/peoples/:id_event/:id_group/:id', auth.validate, people.updatePeople);
 // router.delete('/peoples/:id_event/:id_group/:id', auth.validate, people.deletePeople);
+
+export const deleteAdminPeople = 
+async (id_event:number, id_group:number, id: number): Promise<true | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.delete(`/peoples/${id_event}/${id_group}/${id}`, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return !json.data.error;
+    } catch (error) {
+        return false;
+    }
+}

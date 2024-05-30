@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 
+type ButtonType = "link" | "secondary" | "destructive" | "default" | "outline" | "ghost" ;
 type Props = {
     value: string;
-    variant: string;
+    variant: ButtonType;
     onClick?: () => void;
     disabled?: boolean;
 }
