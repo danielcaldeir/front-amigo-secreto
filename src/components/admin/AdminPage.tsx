@@ -5,25 +5,19 @@ import { Event } from "@/types/Event";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
-  EventADD,
+  // EventADD,
   EventItem, 
   EventItemNotFound, 
   EventItemPhaceholder, 
-  OpenADDAlertDialog
+  // OpenADDAlertDialog
 } from "@/components/admin/EventItem";
+import { OpenADDAlertDialog } from "@/components/admin/AlertDialog";
+import { EventADD } from "@/components/admin/EventAdd";
 import { EventEdit } from "@/components/admin/EventModal";
 import { PlusCircleIcon } from "lucide-react";
 import { ModalScreens } from "@/types/modalScreens";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogFooter, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger 
-} from "@/components/ui/dialog";
-import { OpenModalAlertDialog } from "@/components/helpers/AlertDialogHelpers";
+// import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+// import { OpenModalAlertDialog } from "@/components/helpers/AlertDialogHelpers";
 import { ModalDemo } from "@/components/util/ModalDemo";
 import { ItemButton } from "@/components/helpers/ButtonHelpers";
 
@@ -67,7 +61,11 @@ export const AdminPage = () => {
                   title="Criar um Novo Evento"
                   refreshAction={loadEvents}
                 />
-                {/* <ItemButton IconElement={PlusCircleIcon} label="" onClick={ () => setModalScreen('add') } /> */}
+                <ItemButton 
+                  IconElement={PlusCircleIcon} 
+                  label="" 
+                  onClick={ () => setModalScreen('add') } 
+                />
               </CardHeader>
               
               {loading && <EventItemPhaceholder />}
