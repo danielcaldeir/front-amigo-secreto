@@ -21,6 +21,8 @@ export const EventEdit = ({ event, refreshAction }: EditProps) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<ErrorItem[]>([]);
 
+    if(!event) return null;
+
     // const handleAddButton = async() => {
     //     setError([]);
     //     const data = formSchema.safeParse({titleField, descriptionField, groupedField });
@@ -38,41 +40,29 @@ export const EventEdit = ({ event, refreshAction }: EditProps) => {
     return (
         <Card>
             <CardContent>
-                <div className="flex flex-col items-start mt-4">
-                    <Label>Titulo</Label>
-                    <Input 
-                        value={titleField} 
-                        onChange={e => setTitleField(e.target.value)} 
-                        placeholder="Digite o Titulo do Evento" 
-                        disabled={loading}
-                        onError={error.find(item => item.field === 'titleField')?.message.toString} 
-                    />
+                <div className="flex text-center border-b border-gray-500 cursor-pointer"></div>
+                <div>
+                    {tab === 'info'   && ''}
+                    {tab === 'groups' && ''}
+                    {tab === 'people' && ''}
                 </div>
-                <div className="flex flex-col items-start mt-4">
-                    <Label>Descrição</Label>
-                    <Input 
-                        value={descriptionField} 
-                        onChange={e => setDescriptionField(e.target.value)} 
-                        placeholder="Digite a descrição do Evento" 
-                        disabled={loading}
-                        onError={error.find(item => item.field === 'descriptionField')?.message.toString} 
-                    />
-                </div>
-                <div className="flex flex-row items-start mt-4">
-                    <Label>Será Agrupado?</Label>
-                    <Input 
-                        type="checkbox" 
-                        checked={groupedField} 
-                        onChange={e => setGroupedField(!groupedField)} 
-                        className="w-20 h-6 mt-3" 
-                        onError={error.find(item => item.field === 'groupedField')?.message.toString} 
-                    />
-                </div>
-                <div className="flex flex-row items-center mt-6">
+                {/* <div className="flex flex-col items-start mt-4"> */}
+                    {/* <Label>Titulo</Label> */}
+                    {/* <Input value={titleField} onChange={e => setTitleField(e.target.value)} placeholder="Digite o Titulo do Evento" disabled={loading} onError={error.find(item => item.field === 'titleField')?.message.toString} /> */}
+                {/* </div> */}
+                {/* <div className="flex flex-col items-start mt-4"> */}
+                    {/* <Label>Descrição</Label> */}
+                    {/* <Input value={descriptionField} onChange={e => setDescriptionField(e.target.value)} placeholder="Digite a descrição do Evento" disabled={loading} onError={error.find(item => item.field === 'descriptionField')?.message.toString} /> */}
+                {/* </div> */}
+                {/* <div className="flex flex-row items-start mt-4"> */}
+                    {/* <Label>Será Agrupado?</Label> */}
+                    {/* <Input type="checkbox" checked={groupedField} onChange={e => setGroupedField(!groupedField)} className="w-20 h-6 mt-3" onError={error.find(item => item.field === 'groupedField')?.message.toString} /> */}
+                {/* </div> */}
+                {/* <div className="flex flex-row items-center mt-6"> */}
                     {/* <ShowButtonReset label="Cancelar" onClick={refreshAction}/> */}
                     {/* {loading && <ButtonDisabled /> } */}
                     {/* {!loading && <ShowButtonSubmit label="Adicionar" onClick={handleAddButton} /> } */}
-                </div>
+                {/* </div> */}
             </CardContent>
         </Card>
     );
