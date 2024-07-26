@@ -1,17 +1,8 @@
 import { ShowWarning } from "@/components/helpers/AlertHelpers";
-import { 
-    OpenDelEventModal, 
-    OpenModalAlertDialog 
-} from "@/components/helpers/AlertDialogHelpers";
-import { 
-    ButtonDisabled, 
-    ItemButton, 
-    ShowButtonReset, 
-    ShowButtonSubmit 
-} from "@/components/helpers/ButtonHelpers";
+import { OpenDelEventModal } from "@/components/helpers/AlertDialogHelpers";
+import { ItemButton } from "@/components/helpers/ButtonHelpers";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Event } from "@/types/Event";
-// import { ItemButton } from "@/components/util/ItemButton";
 import { 
     LinkIcon, 
     LucideIcon, 
@@ -20,27 +11,23 @@ import {
     Trash2Icon, 
     TrashIcon 
 } from "lucide-react";
-import { addAdminEvent, deleteAdminEvent, getAdminEvent } from "@/api/admin";
-import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-// import { Button } from "@/components/ui/button";
-import { z } from "zod";
-// import { useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
-import { ErrorItem, getErrorFromZod } from "@/lib/getErrorFromZod";
-import { OpenEditAlertDialog } from "@/components/admin/AlertDialog";
-// import { Checkbox } from "@/components/ui/checkbox";
+import { 
+    addAdminEvent, 
+    deleteAdminEvent, 
+    getAdminEvent 
+} from "@/api/admin";
+import { OpenEditAlertDialog } from "@/components/admin/EventEdit";
+import { ModalScreens } from "@/types/modalScreens";
 
 type EventItemProps = {
     item: Event;
     refreshAction: () => void;
-    openModal: (event: Event) => void;
+    openModal: (event: Event, screens: ModalScreens) => void;
 }
 
 export const EventItem = ({item, refreshAction, openModal}: EventItemProps) => {
-    const handleEditButton = () => openModal(item);
+    const handleEditButton = () => openModal(item, 'edit');
+    const handleDelButton = () => openModal(item, 'del');
 
     const handleDeleteButton = async () => {
         console.log("Deletando Item!!");
@@ -84,7 +71,11 @@ export const EventItem = ({item, refreshAction, openModal}: EventItemProps) => {
                                 label="" 
                                 refreshAction={refreshAction} 
                             />
-                            {/* <ItemButton IconElement={Trash2Icon} label="" onClick={handleDeleteButton} /> */}
+                            <ItemButton 
+                                IconElement={Trash2Icon} 
+                                label="" 
+                                onClick={handleDelButton} 
+                            />
                         </div>
                     </TableCell>
                 </TableRow>
@@ -108,7 +99,3 @@ export const EventItemNotFound = () => {
         </div>
     );
 }
-
-
-
-

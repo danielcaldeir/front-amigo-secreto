@@ -55,35 +55,6 @@ export const EventADD = ({ refreshAction }: AddProps) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<ErrorItem[]>([]);
 
-    // 1. Define your form.
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            titleField: "",
-            descriptionField: "",
-            groupedField: false,
-        },
-    });
-
-    // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values);
-        setLoading(true);
-        clickAdd(values);
-    }
-
-    const clickAdd = async(data: z.infer<typeof formSchema>) => {
-        const eventItem = await addAdminEvent({
-            title: data.titleField,
-            description: data.descriptionField,
-            grouped: data.groupedField
-        });
-        setLoading(false);
-        if (eventItem) { refreshAction(); }
-    }
-
     const handleAddButton = async() => {
         setError([]);
         const data = formSchema.safeParse({titleField, descriptionField, groupedField });
@@ -102,58 +73,6 @@ export const EventADD = ({ refreshAction }: AddProps) => {
     return (
         <Card>
             <CardContent>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormField 
-                                control={form.control}
-                                name="titleField"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Titulo</FormLabel> 
-                                        <FormControl> 
-                                            <Input type="text" placeholder="Digite o Titulo do Evento" className="outline-none bg-gray-300 text-white" {...field} /> 
-                                        </FormControl> 
-                                        {/* <FormDescription>This is your public display name.</FormDescription>  */}
-                                        <FormMessage /> 
-                                    </FormItem>
-                                 )}
-                            />
-                            <FormField 
-                                control={form.control}
-                                name="descriptionField"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Descrição</FormLabel>
-                                        <FormControl>
-                                            <Input type="text" placeholder="Digite a descrição do Evento" className="outline-none bg-gray-300 text-white" {...field} />
-                                        </FormControl>
-                                        {/* <FormDescription>This is your public display name.</FormDescription> */}
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField 
-                                control={form.control}
-                                name="groupedField"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormControl>
-                                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                                            {/* <Input type="checkbox" checked={groupedField} className="w-20 h-6 mt-3" {...field} /> */}
-                                        </FormControl>
-                                        <FormLabel>Será Agrupado?</FormLabel>
-                                        {/* <FormDescription>This is your public display name.</FormDescription> */}
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <Card className="flex flex-row">
-                                <ShowButtonReset label="Cancelar" />
-                                {loading && <ButtonDisabled /> }
-                                {!loading && <ShowButtonSubmit label="Adicionar" /> }
-                            </Card>
-                        </form>
-                    </Form>
                 <div className="flex flex-col items-start mt-4">
                     <Label>Titulo</Label>
                     <Input 
