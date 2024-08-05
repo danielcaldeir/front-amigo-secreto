@@ -1,25 +1,30 @@
 "use client";
 
-import { getAdminEvents } from "@/api/admin";
+import { deleteAdminEvent, getAdminEvents } from "@/api/admin";
 import { Event } from "@/types/Event";
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
-  // EventADD,
+  Card, 
+  CardContent, 
+  CardHeader, 
+  CardTitle 
+} from "@/components/ui/card";
+import { 
   EventItem, 
   EventItemNotFound, 
   EventItemPhaceholder, 
-  // OpenADDAlertDialog
 } from "@/components/admin/EventItem";
-import { OpenADDAlertDialog } from "@/components/admin/AlertDialog";
-import { EventADD } from "@/components/admin/EventAdd";
-import { EventEdit } from "@/components/admin/EventModal";
+import { 
+  ButtonDisabled, 
+  ItemButton, 
+  ShowButton, 
+  ShowButtonSubmit 
+} from "@/components/helpers/ButtonHelpers";
+import { EventADD, OpenADDAlertDialog } from "@/components/admin/EventAdd";
+import { EventEdit } from "@/components/admin/EventEdit";
 import { PlusCircleIcon } from "lucide-react";
 import { ModalScreens } from "@/types/modalScreens";
-// import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-// import { OpenModalAlertDialog } from "@/components/helpers/AlertDialogHelpers";
 import { ModalDemo } from "@/components/util/ModalDemo";
-import { ItemButton } from "@/components/helpers/ButtonHelpers";
 
 export const AdminPage = () => {
     const [events, setEvents] = useState<Event[]>([]);
@@ -39,9 +44,9 @@ export const AdminPage = () => {
         loadEvents();
     },[]);
 
-    const editEvent = (event: Event) => {
+    const editEvent = (event: Event, screens: ModalScreens) => {
       setSelectedEvent(event);
-      setModalScreen('edit');
+      setModalScreen(screens);
     }
 
     const handleADDEvent = () => {
@@ -57,7 +62,7 @@ export const AdminPage = () => {
                 {/* <PlusCircleIcon /> */}
                 <OpenADDAlertDialog 
                   IconElement={PlusCircleIcon} 
-                  onClick={ handleADDEvent } 
+                  // onClick={ handleADDEvent } 
                   title="Criar um Novo Evento"
                   refreshAction={loadEvents}
                 />
@@ -79,18 +84,12 @@ export const AdminPage = () => {
                         key={item.id}
                         item={item} 
                         refreshAction={loadEvents} 
-                        openModal={(event) => editEvent(event)} 
+                        openModal={(event, screens) => editEvent(event, screens)} 
                       />
                     )
                   ) 
                 }
               </CardContent>
-                {/* <Card>Eventos</Card> */}
-                {/* <Card> */}
-                    {/* {loading && <div>Carregando ...</div>} */}
-                    {/* {!loading && events.length > 0 && events.map( item => [<div key={item.id}>{item.title}</div>]) } */}
-                    {/* {!loading && events.length == 0 && <CardTitle>Nao foi possivel carregar nenhum Evento</CardTitle>  } */}
-                {/* </Card> */}
             </Card>
             <Card>
               {modalScreen && 
@@ -98,9 +97,48 @@ export const AdminPage = () => {
                   {/* Tipo: {modalScreen} */}
                   {modalScreen == 'add' && <EventADD refreshAction={loadEvents} />}
                   {modalScreen == 'edit' && <EventEdit event={selectedEvent} refreshAction={loadEvents} />}
+                  {modalScreen == 'del' && <EventDel event={selectedEvent} refreshAction={loadEvents} />}
                 </ModalDemo>
               }
             </Card>
         </section>
     );
+}
+
+type DelProps = {
+  event: Event | undefined;
+  refreshAction: () => void;
+}
+
+export const EventDel = ({ event, refreshAction }: DelProps) => {
+  const [loading, setLoading] = useState(false);
+
+  if(!event) return null;
+
+  const handleConfirmButton = async() => {
+      setLoading(true);
+      const eventItem = await deleteAdminEvent(event.id);
+      setLoading(false);
+      if (eventItem) { refreshAction(); }
+  }
+
+  return (
+      <>
+        <Card>
+          <CardHeader>
+            <CardTitle>Exclusao de Evento!</CardTitle>
+          </CardHeader>
+          <CardContent>
+              <div className="flex text-center border-b border-gray-500 cursor-pointer">
+              Tem certeza que deseja excluir este Evento?
+              </div>
+              <div className="flex flex-row items-center mt-6">
+                  <ShowButton label="Cancelar" onClick={refreshAction} />
+                  {loading && <ButtonDisabled /> }
+                  {!loading && <ShowButtonSubmit label="Confirmar" onClick={handleConfirmButton} /> }
+              </div>
+          </CardContent>
+        </Card>
+      </>
+  );
 }
