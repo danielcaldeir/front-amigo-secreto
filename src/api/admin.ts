@@ -1,5 +1,6 @@
 import { req } from "@/api/axios";
 import { Event } from "@/types/Event";
+import { Group } from "@/types/Group";
 import { getCookie } from "cookies-next";
 // import { cookies } from "next/headers";
 
@@ -53,11 +54,31 @@ type AddEventData = {
     description: string;
     grouped: boolean;
 }
+
 export const addAdminEvent = 
 async (data: AddEventData): Promise<Event | false> => {
     try {
         const token = getCookie('token');
         const json = await req.post('/admin/events/', data, 
+            { headers: {'Authorization': `Token ${token}`} });
+        return json.data.events as Event ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+
+type EditEventData = {
+    title?: string;
+    description?: string;
+    grouped?: boolean;
+    status?: boolean;
+}
+
+export const editAdminEvent = 
+async (id:number, data: EditEventData): Promise<Event | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.put('/admin/events/'+id, data, 
             { headers: {'Authorization': `Token ${token}`} });
         return json.data.events as Event ?? false;
     } catch (error) {
@@ -83,7 +104,31 @@ async (id: number): Promise<true | false> => {
 // router.post('/groups/:id_event', auth.validate, group.addGroup);
 // router.put('/groups/:id_event/:id_group', auth.validate, group.updateGroup);
 // router.delete('/groups/:id_event/:id_group', auth.validate, group.deleteGroup);
+export const getAdminGroups = 
+async (id_event:number ): Promise<Group[] | []> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.get('/admin/groups/'+id_event, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return json.data.events as Group[] ?? [];
+    } catch (error) {
+        return [];
+    }
+}
 
+export const getAdminGroup = 
+async (id_event:number, id: number): Promise<Group | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.get('/admin/groups/'+id_event+'/'+id, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return json.data.events as Group ?? false;
+    } catch (error) {
+        return false;
+    }
+}
 // PEOPLES
 // router.get('/peoples/group/:id_event/:id_group', auth.validate, people.getAll);
 // router.get('/peoples/event/:id_event', auth.validate, people.getAll);
