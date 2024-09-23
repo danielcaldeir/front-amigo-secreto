@@ -12,17 +12,6 @@ import {
   CardFooter 
 } from "@/components/ui/card";
 import { 
-  AlertDialog, 
-  AlertDialogAction, 
-  AlertDialogCancel, 
-  AlertDialogContent, 
-  AlertDialogDescription, 
-  AlertDialogFooter, 
-  AlertDialogHeader, 
-  AlertDialogTitle, 
-  AlertDialogTrigger 
-} from "@/components/ui/alert-dialog";
-import { 
   Form, 
   FormControl, 
   FormDescription, 
@@ -50,9 +39,9 @@ import { LucideIcon } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editAdminEvent } from "@/api/admin";
 import { Checkbox } from "@/components/ui/checkbox";
-import { InputField } from "@/components/helpers/InputHelpers";
+import { updateAdminEvent } from "@/api/admin";
+import { TabInfo } from "@/components/admin/EventTabInfo";
 
 type EditProps = {
     event: Event | undefined;
@@ -64,132 +53,38 @@ export const EventEdit = ({ event, refreshAction }: EditProps) => {
 
     if(!event) return null;
 
-    // const handleAddButton = async() => {
-    //     setError([]);
-    //     const data = formSchema.safeParse({titleField, descriptionField, groupedField });
-    //     if (!data.success) { return(setError(getErrorFromZod(data.error))); }
-    //     setLoading(true);
-    //     const eventItem = await addAdminEvent({
-    //         title: data.data.titleField,
-    //         description: data.data.descriptionField,
-    //         grouped: data.data.groupedField
-    //     });
-    //     setLoading(false);
-    //     if (eventItem) { refreshAction(); }
-    // }
-
     return (
         <>
-        <Card>
+          <Card>
             <CardContent>
-                <div className="flex text-center border-b border-gray-500 cursor-pointer">
-                  <div 
-                    onClick={() => setTab('info')} 
-                    className={`flex-1 p-3 hover:bg-gray-700 ${tab=='info' ? 'bg-gray-600' : ''}`} 
-                  >Informacoes</div>
-                  <div 
-                    onClick={() => setTab('groups')} 
-                    className={`flex-1 p-3 hover:bg-gray-700 ${tab=='groups' ? 'bg-gray-600' : ''}`} 
-                  >Grupos</div>
-                  <div 
-                    onClick={() => setTab('people')} 
-                    className={`flex-1 p-3 hover:bg-gray-700 ${tab=='people' ? 'bg-gray-600' : ''}`} 
-                  >Pessoas</div>
-                </div>
-                <div>
-                    {tab === 'info'   && <TabInfo event={event} refreshAction={refreshAction} />}
-                    {tab === 'groups' && <TabGroups event={event} refreshAction={refreshAction} />}
-                    {tab === 'people' && <TabPeople event={event} refreshAction={refreshAction} />}
-                </div>
+              <div className="flex text-center border-b border-gray-500 cursor-pointer">
+                <div 
+                  onClick={() => setTab('info')} 
+                  className={`flex-1 p-3 hover:bg-gray-700 ${tab=='info' ? 'bg-gray-600' : ''}`} 
+                >Informacoes</div>
+                <div 
+                  onClick={() => setTab('groups')} 
+                  className={`flex-1 p-3 hover:bg-gray-700 ${tab=='groups' ? 'bg-gray-600' : ''}`} 
+                >Grupos</div>
+                <div 
+                  onClick={() => setTab('people')} 
+                  className={`flex-1 p-3 hover:bg-gray-700 ${tab=='people' ? 'bg-gray-600' : ''}`} 
+                >Pessoas</div>
+              </div>
+              <div>
+                {tab === 'info'   && <TabInfo event={event} refreshAction={refreshAction} />}
+                {tab === 'groups' && <TabGroups event={event} refreshAction={refreshAction} />}
+                {tab === 'people' && <TabPeople event={event} refreshAction={refreshAction} />}
+              </div>
             </CardContent>
-        </Card>
-        
-      </>
+          </Card>
+        </>
     );
 }
 
 type TabProps = {
   event: Event | undefined;
   refreshAction: () => void;
-}
-
-export const TabInfo = ({ event, refreshAction }: TabProps) => {
-  const [loading, setLoading] = useState(false);
-  const [titleField, setTitleField] = useState(event?.title);
-  const [descriptionField, setDescriptionField] = useState(event?.description);
-  const [groupedField, setGroupedField] = useState(event?.grouped);
-  const [statusField, setStatusField] = useState(event?.status);
-  const [error, setError] = useState<ErrorItem[]>([]);
-
-  if(!event) return null;
-
-  useEffect(() => {
-    setError([]);
-    const data = formSchema.safeParse({ titleField, descriptionField, groupedField, statusField });
-    if (!data.success){ setError(getErrorFromZod(data.error)) }
-  },[titleField, descriptionField, groupedField, statusField]);
-
-  const handleSaveButton = async() => {
-
-      setLoading(true);
-      // const eventItem = await deleteAdminEvent(event.id);
-      setLoading(false);
-      // if (eventItem) { refreshAction(); }
-  }
-
-  return (
-    <Card>
-      <CardContent>
-        <div className="flex flex-col items-start mt-4">
-            <Label>Titulo</Label>
-            <InputField 
-                value={titleField} 
-                onChange={e => setTitleField(e.target.value)} 
-                placeholder="Digite o Titulo do Evento"
-                disabled={loading}
-                errorMessage={error.find(item => item.field === 'titleField')?.message}
-            />
-        </div>
-        <div className="flex flex-col items-start mt-4">
-            <Label>Descrição</Label>
-            <InputField 
-                value={descriptionField} 
-                onChange={e => setDescriptionField(e.target.value)} 
-                placeholder="Digite a descrição do Evento" 
-                disabled={loading}
-                errorMessage={error.find(item => item.field === 'descriptionField')?.message} 
-            />
-        </div>
-        <div className="flex flex-col ">
-          <div className="flex items-start mt-4">
-              <Label>Agrupar Sorteio?</Label>
-              <Input 
-                  type="checkbox" 
-                  checked={groupedField} 
-                  onChange={e => setGroupedField(!groupedField)} 
-                  className="w-20 h-6 mt-3" 
-                  // errorMessage={error.find(item => item.field === 'groupedField')?.message.toString} 
-              />
-          </div>
-          <div className="flex items-start mt-4">
-              <Label>Evento Liberado?</Label>
-              <Input 
-                  type="checkbox" 
-                  checked={statusField} 
-                  onChange={e => setStatusField(!statusField)} 
-                  className="w-20 h-6 mt-3" 
-                  // errorMessage={error.find(item => item.field === 'statusField')?.message.toString} 
-              />
-          </div>
-        </div>
-        <div className="flex flex-row items-center mt-6">
-            <ShowButton label="Cancelar" onClick={refreshAction} />
-            {loading && <ButtonDisabled /> }
-            {!loading && <ShowButtonSubmit label="Adicionar" onClick={handleSaveButton} /> }
-        </div>
-      </CardContent>
-    </Card>
-  );
 }
 
 const formSchema = z.object({
@@ -271,7 +166,7 @@ export const TabInfoDialog = ({ event, refreshAction }: TabProps) => {
   // const [descriptionField, setDescriptionField] = useState(event?.description);
   // const [groupedField, setGroupedField] = useState(event?.grouped);
   // const [statusField, setStatusField] = useState(event?.status);
-  const [error, setError] = useState<ErrorItem[]>([]);
+  // const [error, setError] = useState<ErrorItem[]>([]);
 
   if(!event) return null;
 
@@ -291,7 +186,7 @@ export const TabInfoDialog = ({ event, refreshAction }: TabProps) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    setLoading(true);
+    // setLoading(true);
     clickAdd(values);
   }
 
@@ -300,14 +195,26 @@ export const TabInfoDialog = ({ event, refreshAction }: TabProps) => {
     // const data = formSchema.safeParse({titleField, descriptionField, groupedField });
     // if (!data.success) { return(setError(getErrorFromZod(data.error))); }
 
-    const eventItem = await editAdminEvent(event.id, {
+    setLoading(true);
+    const eventItem = await updateAdminEvent(event.id, {
         title: data.titleField,
         description: data.descriptionField,
         grouped: data.groupedField,
         status: data.statusField
     });
     setLoading(false);
-    if (eventItem) { refreshAction(); }
+    if (eventItem) { 
+      refreshAction(); 
+    } else {
+      alert("Nao foi possivel realizar o sorteio neste grupo");
+      // <ShowInformation message="Nao foi possivel realizar o sorteio neste grupo"/>
+      setLoading(true);
+      await updateAdminEvent(event.id, {
+        status: !data.statusField
+      });
+      setLoading(false);
+      refreshAction();
+    }
   }
 
   // const handleConfirmButton = async() => {

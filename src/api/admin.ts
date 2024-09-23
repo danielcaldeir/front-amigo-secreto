@@ -67,20 +67,24 @@ async (data: AddEventData): Promise<Event | false> => {
     }
 }
 
-type EditEventData = {
+type UpdateEventData = {
     title?: string;
     description?: string;
     grouped?: boolean;
     status?: boolean;
 }
 
-export const editAdminEvent = 
-async (id:number, data: EditEventData): Promise<Event | false> => {
+export const updateAdminEvent = 
+async (id:number, data: UpdateEventData): Promise<Event | false> => {
     try {
         const token = getCookie('token');
         const json = await req.put('/admin/events/'+id, data, 
             { headers: {'Authorization': `Token ${token}`} });
-        return json.data.events as Event ?? false;
+        if (json.data.success) {
+            return json.data.events as Event ?? false;
+        } else {
+            return false;
+        }
     } catch (error) {
         return false;
     }
