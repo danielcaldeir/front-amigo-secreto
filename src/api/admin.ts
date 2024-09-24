@@ -115,7 +115,7 @@ async (id_event:number ): Promise<Group[] | []> => {
         const json = await req.get('/admin/groups/'+id_event, {
             headers: {'Authorization': `Token ${token}`}
         });
-        return json.data.events as Group[] ?? [];
+        return json.data.groups as Group[] ?? [];
     } catch (error) {
         return [];
     }
@@ -128,7 +128,56 @@ async (id_event:number, id: number): Promise<Group | false> => {
         const json = await req.get('/admin/groups/'+id_event+'/'+id, {
             headers: {'Authorization': `Token ${token}`}
         });
-        return json.data.events as Group ?? false;
+        return json.data.groups as Group ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+
+type AddGroupData = {
+    name: string;
+}
+
+export const addAdminGroup = 
+async (id_event:number, data: AddGroupData): Promise<Group | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.post('/admin/groups/'+ id_event, data, 
+            { headers: {'Authorization': `Token ${token}`} });
+        return json.data.groups as Group ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+
+type UpdateGroupData = {
+    name?: string;
+}
+
+export const updateAdminGroup = 
+async (id_event:number, id:number, data: UpdateGroupData): Promise<Group | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.put('/admin/groups/'+id_event+'/'+id, data, 
+            { headers: {'Authorization': `Token ${token}`} });
+        if (json.data.success) {
+            return json.data.groups as Group ?? false;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        return false;
+    }
+}
+
+export const deleteAdminGroup = 
+async (id_event:number, id: number): Promise<true | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.delete('/admin/groups/'+id_event+'/'+id, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return !json.data.error;
     } catch (error) {
         return false;
     }

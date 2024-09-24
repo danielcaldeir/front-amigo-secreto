@@ -13,10 +13,10 @@ export const ShowButtonSubmit = ({label, onClick}: ButtonProps) => {
             variant="default" 
             size="lg" 
             onClick={onClick} 
-            className="w-full uppercase font-bold"
+            className="w-full my-3 p-3 uppercase font-bold"
         >
                 {label}
-        </Button>
+        </Button> 
     );
 }
 
@@ -41,7 +41,7 @@ export const ShowButton = ({label, onClick}: ButtonProps) => {
             variant="default" 
             size="lg" 
             onClick={onClick} 
-            className="w-full uppercase font-bold"
+            className="w-full my-3 p-3 uppercase rounded font-bold text-white text-center"
         >
                 {label}
         </Button>
