@@ -5,17 +5,13 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Event } from "@/types/Event";
 import { 
     LinkIcon, 
-    LucideIcon, 
-    MessageSquareXIcon, 
+    // LucideIcon, 
+    // MessageSquareXIcon, 
     PencilIcon, 
     Trash2Icon, 
-    TrashIcon 
+    // TrashIcon 
 } from "lucide-react";
-import { 
-    addAdminEvent, 
-    deleteAdminEvent, 
-    getAdminEvent 
-} from "@/api/admin";
+// import { addAdminEvent, deleteAdminEvent, getAdminEvent } from "@/api/admin";
 import { OpenEditAlertDialog } from "@/components/admin/EventEdit";
 import { ModalScreens } from "@/types/modalScreens";
 
@@ -29,13 +25,13 @@ export const EventItem = ({item, refreshAction, openModal}: EventItemProps) => {
     const handleEditButton = () => openModal(item, 'edit');
     const handleDelButton = () => openModal(item, 'del');
 
-    const handleDeleteButton = async () => {
-        console.log("Deletando Item!!");
-        if (confirm('Tem certeza que deseja excluir este Evento?')) {
-            await deleteAdminEvent(item.id);
-            refreshAction();
-        }
-    }
+    // const handleDeleteButton = async () => {
+    //     console.log("Deletando Item!!");
+    //     if (confirm('Tem certeza que deseja excluir este Evento?')) {
+    //         await deleteAdminEvent(item.id);
+    //         refreshAction();
+    //     }
+    // }
 
     return (
         <Table className="border p-3 mb-3 flex flex-col items-center rounded md:flex-row">
