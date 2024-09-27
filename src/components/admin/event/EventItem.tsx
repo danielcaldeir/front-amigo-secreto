@@ -3,16 +3,8 @@ import { OpenDelEventModal } from "@/components/helpers/AlertDialogHelpers";
 import { ItemButton } from "@/components/helpers/ButtonHelpers";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Event } from "@/types/Event";
-import { 
-    LinkIcon, 
-    // LucideIcon, 
-    // MessageSquareXIcon, 
-    PencilIcon, 
-    Trash2Icon, 
-    // TrashIcon 
-} from "lucide-react";
-// import { addAdminEvent, deleteAdminEvent, getAdminEvent } from "@/api/admin";
-import { OpenEditAlertDialog } from "@/components/admin/EventEdit";
+import { LinkIcon, PencilIcon, Trash2Icon, } from "lucide-react";
+import { OpenEditAlertDialog } from "@/components/admin/event/EventEditAlertDialog";
 import { ModalScreens } from "@/types/modalScreens";
 
 type EventItemProps = {
@@ -24,14 +16,6 @@ type EventItemProps = {
 export const EventItem = ({item, refreshAction, openModal}: EventItemProps) => {
     const handleEditButton = () => openModal(item, 'edit');
     const handleDelButton = () => openModal(item, 'del');
-
-    // const handleDeleteButton = async () => {
-    //     console.log("Deletando Item!!");
-    //     if (confirm('Tem certeza que deseja excluir este Evento?')) {
-    //         await deleteAdminEvent(item.id);
-    //         refreshAction();
-    //     }
-    // }
 
     return (
         <Table className="border p-3 mb-3 flex flex-col items-center rounded md:flex-row">
@@ -52,7 +36,6 @@ export const EventItem = ({item, refreshAction, openModal}: EventItemProps) => {
                                 IconElement={PencilIcon} 
                                 label="" 
                                 title="Editando um Evento" 
-                                // onClick={handleEditButton} 
                                 event={item} 
                                 refreshAction={refreshAction} 
                             />

@@ -4,10 +4,10 @@ import { ErrorItem, getErrorFromZod } from "@/lib/getErrorFromZod";
 import { 
     Card, 
     CardContent, 
-    CardDescription, 
-    CardHeader, 
-    CardTitle, 
-    CardFooter 
+    // CardDescription, 
+    // CardHeader, 
+    // CardTitle, 
+    // CardFooter 
 } from "@/components/ui/card";
 import { z } from "zod";
 import { updateAdminEvent } from "@/api/admin";
@@ -15,7 +15,7 @@ import { InputField } from "@/components/helpers/InputHelpers";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { ButtonDisabled, ShowButtonSubmit } from "@/components/helpers/ButtonHelpers";
-import { ShowInformation } from "@/components/helpers/AlertHelpers";
+// import { ShowInformation } from "@/components/helpers/AlertHelpers";
 
 type TabProps = {
     event: Event | undefined;
