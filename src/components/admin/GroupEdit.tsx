@@ -4,14 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
-import { ButtonDisabled, ShowButtonSubmit } from "../helpers/ButtonHelpers";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { ButtonDisabled, ShowButtonSubmit } from "@/components/helpers/ButtonHelpers";
 import { Group } from "@/types/Group";
 
 function GroupEdit() {
-    return (  );
+    return ( <div>Hello World</div> );
 }
 
 export default GroupEdit;

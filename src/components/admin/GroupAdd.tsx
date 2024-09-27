@@ -18,8 +18,6 @@ const formSchema = z.object({
   
 export const GroupADD = ({ id_event, refreshAction }: AddProps) => {
   const [nameField, setNameField] = useState('');
-  // const [descriptionField, setDescriptionField] = useState('');
-  // const [groupedField, setGroupedField] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorItem[]>([]);
   
@@ -31,8 +29,6 @@ export const GroupADD = ({ id_event, refreshAction }: AddProps) => {
     setLoading(true);
     const newGroup = await addAdminGroup(id_event, {
       name: data.data.nameField,
-      // description: data.data.descriptionField,
-      // grouped: data.data.groupedField
     });
     setLoading(false);
     if (newGroup) { 
@@ -44,6 +40,7 @@ export const GroupADD = ({ id_event, refreshAction }: AddProps) => {
   }
   
   return (
+    <>
     <Card className="w-full my-3 flex-col items-center">
       <CardContent >
         <div className="flex flex-col items-start mt-4">
@@ -63,5 +60,6 @@ export const GroupADD = ({ id_event, refreshAction }: AddProps) => {
         </div>
       </CardContent>
     </Card>
+    </>
   );
 }
