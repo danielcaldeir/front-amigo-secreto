@@ -13,15 +13,15 @@ import {
   EventItem, 
   EventItemNotFound, 
   EventItemPhaceholder, 
-} from "@/components/admin/EventItem";
+} from "@/components/admin/event/EventItem";
 import { 
   ButtonDisabled, 
   ItemButton, 
   ShowButton, 
   ShowButtonSubmit 
 } from "@/components/helpers/ButtonHelpers";
-import { EventADD, OpenADDAlertDialog } from "@/components/admin/EventAdd";
-import { EventEdit } from "@/components/admin/EventEdit";
+import { EventADD, OpenADDAlertDialog } from "@/components/admin/event/EventAdd";
+import { EventEdit } from "@/components/admin/event/EventEdit";
 import { PlusCircleIcon } from "lucide-react";
 import { ModalScreens } from "@/types/modalScreens";
 import { ModalDemo } from "@/components/util/ModalDemo";

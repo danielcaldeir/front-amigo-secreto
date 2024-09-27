@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LucideIcon } from "lucide-react";
-import { TabInfoDialog } from "./EventEdit";
+import { TabInfoDialog } from "@/components/admin/event/EventTabInfo";
 import { Event } from "@/types/Event";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
