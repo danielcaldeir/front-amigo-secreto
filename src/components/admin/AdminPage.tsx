@@ -49,10 +49,10 @@ export const AdminPage = () => {
       setModalScreen(screens);
     }
 
-    const handleADDEvent = () => {
-      // const ping = await getAdminEvent(2);
-      console.log("Click ADD Event: ");
-    }
+    // const handleADDEvent = () => {
+    //   // const ping = await getAdminEvent(2);
+    //   console.log("Click ADD Event: ");
+    // }
 
     return(
         <section className="bg-gray-900 p-5 rounded text-white w-full">

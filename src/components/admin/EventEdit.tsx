@@ -1,12 +1,12 @@
 "use client"
 
-import { ErrorItem, getErrorFromZod } from "@/lib/getErrorFromZod";
+// import { ErrorItem, getErrorFromZod } from "@/lib/getErrorFromZod";
 import { Event } from "@/types/Event";
 import { useEffect, useState } from "react";
 import { 
   Card, 
   CardContent, 
-  CardDescription, 
+  // CardDescription, 
   CardHeader, 
   CardTitle, 
   CardFooter 
@@ -14,7 +14,7 @@ import {
 import { 
   Form, 
   FormControl, 
-  FormDescription, 
+  // FormDescription, 
   FormField, 
   FormItem, 
   FormLabel, 
@@ -42,6 +42,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { updateAdminEvent } from "@/api/admin";
 import { TabInfo } from "@/components/admin/EventTabInfo";
+import { TabGroups } from "@/components/admin/EventTabGroups";
 
 type EditProps = {
     event: Event | undefined;
@@ -94,39 +95,6 @@ const formSchema = z.object({
   statusField: z.boolean(),
 });
 
-export const TabGroups = ({ event, refreshAction }: TabProps) => {
-  const [loading, setLoading] = useState(false);
-
-  if(!event) return null;
-
-  // const handleConfirmButton = async() => {
-  //     setLoading(true);
-  //     const eventItem = await deleteAdminEvent(event.id);
-  //     setLoading(false);
-  //     if (eventItem) { refreshAction(); }
-  // }
-
-  return (
-      <>
-        <Card>
-          <CardHeader>
-            <CardTitle>TabGroups!</CardTitle>
-          </CardHeader>
-          <CardContent>
-              <div className="flex text-center border-b border-gray-500 cursor-pointer">
-              TabGroups Evento?
-              </div>
-              <div className="flex flex-row items-center mt-6">
-                  <ShowButton label="Cancelar" onClick={refreshAction} />
-                  {loading && <ButtonDisabled /> }
-                  {!loading && <ShowButtonSubmit label="Confirmar" /> }
-              </div>
-          </CardContent>
-        </Card>
-      </>
-  );
-}
-
 export const TabPeople = ({ event, refreshAction }: TabProps) => {
   const [loading, setLoading] = useState(false);
 
@@ -162,11 +130,6 @@ export const TabPeople = ({ event, refreshAction }: TabProps) => {
 
 export const TabInfoDialog = ({ event, refreshAction }: TabProps) => {
   const [loading, setLoading] = useState(false);
-  // const [titleField, setTitleField] = useState(event?.title);
-  // const [descriptionField, setDescriptionField] = useState(event?.description);
-  // const [groupedField, setGroupedField] = useState(event?.grouped);
-  // const [statusField, setStatusField] = useState(event?.status);
-  // const [error, setError] = useState<ErrorItem[]>([]);
 
   if(!event) return null;
 
@@ -415,3 +378,4 @@ export function OpenEditAlertDialog({IconElement, event, label, title, onClick, 
       </Dialog>
   );
 }
+
