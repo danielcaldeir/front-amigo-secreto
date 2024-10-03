@@ -10,9 +10,9 @@ import { ShowWarning } from "@/components/helpers/AlertHelpers";
 // import { OpenEditAlertDialog } from "@/components/admin/event/EventEditAlertDialog";
 // import { OpenDelEventModal } from "@/components/helpers/AlertDialogHelpers";
 // import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { GroupADD } from "@/components/admin/GroupAdd";
-import { GroupItem } from "@/components/admin/GroupItem";
-import GroupEdit from "@/components/admin/GroupEdit";
+import { GroupADD } from "@/components/admin/group/GroupAdd";
+import { GroupItem } from "@/components/admin/group/GroupItem";
+import GroupEdit from "@/components/admin/group/GroupEdit";
 
 type TabProps = {
   event?: Event | undefined;
@@ -50,7 +50,7 @@ export const TabGroups = ({ event, refreshAction }: TabProps) => {
         {!selectedGroup && 
           <GroupADD id_event={event.id} refreshAction={loadGroups}/>
         }
-        {selectedGroup && <GroupEdit />}
+        {selectedGroup && <GroupEdit event={event} group={selectedGroup} refreshAction={loadGroups}/>}
       </CardHeader>
       <CardContent className="w-full my-3 flex-row items-center">
       {/* <CardContent> */}

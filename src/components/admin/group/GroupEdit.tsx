@@ -9,9 +9,62 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { ButtonDisabled, ShowButtonSubmit } from "@/components/helpers/ButtonHelpers";
 import { Group } from "@/types/Group";
+import { InputField } from "@/components/helpers/InputHelpers";
+import { Label } from "@/components/ui/label";
+import { ErrorItem, getErrorFromZod } from "@/lib/getErrorFromZod";
 
-function GroupEdit() {
-    return ( <div>Hello World</div> );
+type EditProps = {
+  event: Event | undefined;
+  group: Group | undefined;
+  refreshAction: () => void;
+}
+
+function GroupEdit({ event, group, refreshAction }: EditProps) {
+  const [nameField, setNameField] = useState(group?.name);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<ErrorItem[]>([]);
+
+  if(!group) return null;
+
+  const handleEditButton = async() => {
+    setError([]);
+    const data = formSchema.safeParse({ nameField });
+    if (!data.success) { return(setError(getErrorFromZod(data.error))); }
+
+    setLoading(true);
+    const newGroup = await updateAdminGroup(group?.id_event, group?.id, {
+      name: data.data.nameField,
+    });
+    setLoading(false);
+    if (newGroup) { 
+      setNameField('');
+      refreshAction(); 
+    } else {
+      alert('Nao foi possivel incluir o grupo!');
+    }
+  }
+
+  return ( 
+    <Card className="w-full my-3 flex-col items-center">
+      <CardContent >
+        <div className="flex flex-col items-start mt-4">
+            <Label>Novo Grupo</Label>
+            <InputField 
+                value={nameField} 
+                onChange={e => setNameField(e.target.value)} 
+                placeholder="Digite o Nome do Grupo" 
+                disabled={loading}
+                errorMessage={error.find(item => item.field === 'nameField')?.message} 
+            />
+        </div>
+        <div className="flex flex-row items-center mt-6 m-3">
+            {/* <ShowButton label="Cancelar" onClick={refreshAction} /> */}
+            {loading && <ButtonDisabled /> }
+            {!loading && <ShowButtonSubmit label="Editar" onClick={handleEditButton} /> }
+        </div>
+      </CardContent>
+    </Card> 
+  );
 }
 
 export default GroupEdit;

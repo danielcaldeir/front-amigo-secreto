@@ -24,27 +24,27 @@ export const GroupItem = ({ item, onEdit, refreshAction }: GroupItemProps) => {
   
   return (
     <Table className="border p-3 mb-3 flex flex-col items-center rounded md:flex-row">
-        <TableBody>
-            <TableRow>
-                <TableCell>
-                    <div key={item.id}>{item.name}</div>
-                </TableCell>
-                <TableCell>
-                    <div className="flex items-center gap-1 mt-2 md:flex-row">
-                    <ItemButton 
-                        IconElement={PencilIcon} 
-                        label="" 
-                        onClick={ () => onEdit(item) } 
-                    />
-                    <ItemButton 
-                        IconElement={Trash2Icon} 
-                        label="" 
-                        onClick={ handleDeleteButton } 
-                    />
-                    </div>
-                </TableCell>
-            </TableRow>
-        </TableBody>
+      <TableBody className="w-full items-center">
+          <TableRow className="w-full ">
+              <TableCell className="flex-1 p-3 mb-3 ">
+                  <div key={item.id}>{item.name}</div>
+              </TableCell>
+              <TableCell className="flex-1 ">
+                  <div className="flex items-center gap-1 mt-2 md:flex-row">
+                  <ItemButton 
+                      IconElement={PencilIcon} 
+                      label="" 
+                      onClick={ () => onEdit(item) } 
+                  />
+                  <ItemButton 
+                      IconElement={Trash2Icon} 
+                      label="" 
+                      onClick={ handleDeleteButton } 
+                  />
+                  </div>
+              </TableCell>
+          </TableRow>
+      </TableBody>
     </Table>
   );
 }
