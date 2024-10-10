@@ -160,11 +160,11 @@ async (id_event:number, id:number, data: UpdateGroupData): Promise<Group | false
         const token = getCookie('token');
         const json = await req.put('/admin/groups/'+id_event+'/'+id, data, 
             { headers: {'Authorization': `Token ${token}`} });
-        if (json.data.success) {
-            return json.data.groups as Group ?? false;
-        } else {
-            return false;
-        }
+        // if (json.data.success) {
+        return json.data.groups as Group ?? false;
+        // } else {
+            // return false;
+        // }
     } catch (error) {
         return false;
     }
