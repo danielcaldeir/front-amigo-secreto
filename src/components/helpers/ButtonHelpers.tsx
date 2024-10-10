@@ -98,3 +98,50 @@ export const ItemButton = ({IconElement, label, onClick, href, target, replace}:
         </div>
     );
 }
+
+export const ItemButtonSubmit = ({IconElement, label, onClick, href, target, replace}:ItemButtonProps) => {
+    const content = (
+        <div className="p-3 flex flex-col justify-center items-center gap-2 md:flex-row">
+            <div><IconElement /></div>
+            {label && <div>{label}</div>}
+        </div>
+    );
+
+    return (
+        <div className="rounded hover:bg-gray-800">
+            {href && !onClick && 
+                <Link
+                    type="submit"
+                    href={href}
+                    target={target}
+                    replace={replace}
+                >
+                    {content}
+                </Link>
+            }
+            {!href && !onClick && !label && 
+                <Button variant="ghost" type="submit" size={"icon"} className="cursor-pointer">
+                    {content}
+                </Button>
+            }
+            {!href && onClick && !label && 
+                <Button variant="ghost" type="submit" size={"icon"} onClick={onClick} className="cursor-pointer">
+                    {content}
+                </Button>
+            }
+            {!href && onClick && label &&
+                <Button variant="ghost" type="submit" onClick={onClick} className="cursor-pointer">
+                    {content}
+                </Button>
+            }
+        </div>
+    );
+}
+
+export const ItemButtonDisabled = () => {
+    return (
+        <Button disabled>
+            <RotateCw className="mr-2 h-4 w-4 animate-spin" />
+        </Button>
+    );
+}

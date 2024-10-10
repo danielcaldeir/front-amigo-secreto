@@ -2,10 +2,21 @@ import { addAdminGroup } from "@/api/admin";
 import { ErrorItem, getErrorFromZod } from "@/lib/getErrorFromZod";
 import { useState } from "react";
 import { z } from "zod";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { InputField } from "@/components/helpers/InputHelpers";
-import { ButtonDisabled, ShowButton, ShowButtonSubmit } from "@/components/helpers/ButtonHelpers";
+import { 
+  ButtonDisabled, 
+  ItemButtonDisabled, 
+  ItemButtonSubmit, 
+  ShowButton, 
+  ShowButtonSubmit 
+} from "@/components/helpers/ButtonHelpers";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LucideIcon } from "lucide-react";
 
 type AddProps = {
   id_event: number;
@@ -60,6 +71,82 @@ export const GroupADD = ({ id_event, refreshAction }: AddProps) => {
         </div>
       </CardContent>
     </Card>
+    </>
+  );
+}
+
+type AddGroupDialogProps = {
+  IconElement: LucideIcon;
+  id_event: number;
+  label?: string;
+  title?: string;
+  onClick?: () => void;
+  refreshAction: () => void;
+}
+
+export function OpenADDGroupDialog({IconElement, id_event, refreshAction}: AddGroupDialogProps) {
+  const [nameField, setNameField] = useState('');
+  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState<ErrorItem[]>([]);
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+          nameField: "",
+      },
+  });
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+      // Do something with the form values.
+      // ✅ This will be type-safe and validated.
+      console.log(values);
+      clickAdd(values);
+  }
+
+  const clickAdd = async(data: z.infer<typeof formSchema>) => {
+      // setError([]);
+      // const data = formSchema.safeParse({titleField, descriptionField, groupedField });
+      // if (!data.success) { return(setError(getErrorFromZod(data.error))); }
+      setLoading(true);
+      const eventItem = await addAdminGroup(id_event, {
+          name: data.nameField,
+      });
+      setLoading(false);
+      if (eventItem) { refreshAction(); }
+  }
+  
+  return (
+    <>
+      <Card>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" >
+            <CardFooter>
+              <FormField 
+                control={form.control} 
+                name="nameField"
+                render={({ field }) => ( 
+                    <FormItem> 
+                        <FormLabel>Titulo</FormLabel> 
+                        <FormControl> 
+                        <Input 
+                            type="text" 
+                            placeholder="Digite o Nome do Grupo" 
+                            className="outline-none bg-gray-300 text-white" 
+                            {...field} /> 
+                        </FormControl> 
+                        {/* <FormDescription>This is your public display name.</FormDescription>  */}
+                        <FormMessage /> 
+                    </FormItem> 
+                )} 
+              /> 
+              {loading && <ItemButtonDisabled /> }
+              {/* {!loading && <ShowButtonSubmit label="Adicionar" /> } */}
+              {!loading && <ItemButtonSubmit IconElement={IconElement} /> }
+            </CardFooter>
+          </form>
+        </Form>
+      </Card>
     </>
   );
 }
