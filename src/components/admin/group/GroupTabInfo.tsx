@@ -1,26 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ButtonDisabled, ItemButton, ShowButton, ShowButtonSubmit } from "@/components/helpers/ButtonHelpers";
 import { useEffect, useState } from "react";
 import { Event } from "@/types/Event";
 import { getAdminGroup, getAdminGroups } from "@/api/admin";
 import { Group } from "@/types/Group";
-// import { PencilIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
-// import { EventItemNotFound, EventItemPhaceholder } from "@/components/admin/event/EventItem";
 import { ShowWarning } from "@/components/helpers/AlertHelpers";
-// import { OpenEditAlertDialog } from "@/components/admin/event/EventEditAlertDialog";
-// import { OpenDelEventModal } from "@/components/helpers/AlertDialogHelpers";
-// import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { GroupADD, OpenADDGroupDialog } from "@/components/admin/group/GroupAdd";
 import { GroupItem } from "@/components/admin/group/GroupItem";
-import GroupEdit from "@/components/admin/group/GroupEdit";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { SaveIcon } from "lucide-react";
-import { Table, TableBody } from "@/components/ui/table";
+import { GroupEdit, OpenGroupEditDialog } from "@/components/admin/group/GroupEdit";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { z } from "zod";
+// import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+// import { Input } from "@/components/ui/input";
+// import { Checkbox } from "@/components/ui/checkbox";
+import { PencilIcon, SaveIcon } from "lucide-react";
 
 type TabProps = {
   event?: Event | undefined;
@@ -54,7 +47,6 @@ export const TabGroups = ({ event, refreshAction }: TabProps) => {
   return ( 
     <Card>
       <CardHeader className="my-3 w-full flex flex-row items-center">
-        {/* <CardTitle className="flex-1">TabGroups!</CardTitle> */}
         {!selectedGroup && 
           <GroupADD id_event={event.id} refreshAction={loadGroups}/>
         }
@@ -63,8 +55,6 @@ export const TabGroups = ({ event, refreshAction }: TabProps) => {
         }
       </CardHeader>
       <CardContent className="w-full my-3 flex-row items-center">
-      {/* <CardContent> */}
-        {/* {!selectedGroup && <GroupADD id_event={event.id} refreshAction={loadGroups}/> } */}
         {loading && 
           <>
             <GroupItemPhaceholder />
@@ -83,11 +73,6 @@ export const TabGroups = ({ event, refreshAction }: TabProps) => {
             />
           ) )
         }
-        {/* </div> */}
-        {/* <div className="flex flex-row items-center mt-6"> */}
-          {/* <ShowButton label="Cancelar" onClick={refreshAction} /> */}
-          {/* {loading && <ButtonDisabled /> } */}
-          {/* {!loading && <ShowButtonSubmit label="Confirmar" /> } */}
         {/* </div> */}
       </CardContent>
     </Card>
@@ -125,8 +110,19 @@ export const TabGroupsDialog = ({ event, refreshAction }: TabProps) => {
   // });
 
   const handleEditButton = async (group: Group) => {
-    console.log("Selecionando o Grupo!!");
-    setSelectedGroup(group);
+    setLoading(true);
+    const oneGroup = await getAdminGroup(event.id, group.id);
+    setLoading(false);
+    console.log(oneGroup);
+    if(oneGroup){
+      console.log("Selecionando o Grupo!!");
+      setSelectedGroup(oneGroup);
+      
+    } else {
+      console.log(selectedGroup);
+      refreshAction();
+    }
+    
   }
 
   const loadGroups = async () => {
@@ -152,14 +148,11 @@ export const TabGroupsDialog = ({ event, refreshAction }: TabProps) => {
   return (
     <Card>
       <CardHeader className="my-3 w-full flex flex-row items-center">
-        {/* <CardTitle className="flex-1">TabGroups!</CardTitle> */}
         {!selectedGroup && 
           // <GroupADD id_event={event.id} refreshAction={loadGroups}/>
           <OpenADDGroupDialog IconElement={SaveIcon} id_event={event.id} refreshAction={loadGroups}/>
         }
-        {selectedGroup && 
-          <OpenGroupEditDialog group={selectedGroup} refreshAction={loadGroups}/> 
-        }
+        {selectedGroup && <OpenGroupEditDialog IconElement={PencilIcon} event={event} group={selectedGroup} refreshAction={loadGroups}/> }
       </CardHeader>
       <CardContent className="w-full my-3 flex-row items-center">
       {/* <CardContent> */}
@@ -186,12 +179,6 @@ export const TabGroupsDialog = ({ event, refreshAction }: TabProps) => {
             }
           {/* </TableBody> */}
         {/* </Table> */}
-        
-        {/* </div> */}
-        {/* <div className="flex flex-row items-center mt-6"> */}
-          {/* <ShowButton label="Cancelar" onClick={refreshAction} /> */}
-          {/* {loading && <ButtonDisabled /> } */}
-          {/* {!loading && <ShowButtonSubmit label="Confirmar" /> } */}
         {/* </div> */}
       </CardContent>
     </Card>

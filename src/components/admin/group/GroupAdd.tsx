@@ -127,7 +127,7 @@ export function OpenADDGroupDialog({IconElement, id_event, refreshAction}: AddGr
                 name="nameField"
                 render={({ field }) => ( 
                     <FormItem> 
-                        <FormLabel>Titulo</FormLabel> 
+                        <FormLabel>Novo Grupo</FormLabel> 
                         <FormControl> 
                         <Input 
                             type="text" 
