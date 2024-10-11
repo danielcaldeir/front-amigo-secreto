@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { TabGroupsDialog } from "@/components/admin/group/GroupTabInfo";
 
-type EditAlertDialogProps = {
+type OpenDialogProps = {
   IconElement: LucideIcon;
   event?: Event;
   label?: string;
@@ -19,12 +19,7 @@ type EditAlertDialogProps = {
   refreshAction: () => void;
 }
 
-export function OpenEditAlertDialog({IconElement, event, label, title, onClick, refreshAction}: EditAlertDialogProps) {
-  // const handleADDEvent = async() => {
-  //     const ping = await getAdminEvent(2);
-  //     console.log("ADD Event: "+ping);
-  // }
-  
+export function AdminOpenDialog({IconElement, event, label, title, onClick, refreshAction}: OpenDialogProps) {
   return (
       <Dialog>
         <DialogTrigger asChild>

@@ -4,7 +4,7 @@ import { ItemButton } from "@/components/helpers/ButtonHelpers";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Event } from "@/types/Event";
 import { LinkIcon, PencilIcon, Trash2Icon, } from "lucide-react";
-import { OpenEditAlertDialog } from "@/components/admin/event/EventEditAlertDialog";
+import { AdminOpenDialog } from "@/components/admin/AdminOpenDialog";
 import { ModalScreens } from "@/types/modalScreens";
 
 type EventItemProps = {
@@ -18,11 +18,14 @@ export const EventItem = ({item, refreshAction, openModal}: EventItemProps) => {
     const handleDelButton = () => openModal(item, 'del');
 
     return (
-        <Table className="border p-3 mb-3 flex flex-col items-center rounded md:flex-row">
-            <TableBody>
-                <TableRow>
-                    <TableCell><div key={item.id}>{item.title}</div></TableCell>
-                    <TableCell>
+        <>
+        {/* <Table className="border p-3 mb-3 flex flex-col items-center rounded md:flex-row"> */}
+            {/* <TableBody className="w-full items-center"> */}
+                <TableRow className="w-full items-center ">
+                    <TableCell className="flex-1 p-3 mb-3 w-full">
+                        <div key={item.id}>{item.title}</div>
+                    </TableCell>
+                    <TableCell className="flex-1 ">
                         <div className="flex items-center gap-1 mt-2 md:flex-row">
                             {item.status && 
                                 <ItemButton 
@@ -32,7 +35,7 @@ export const EventItem = ({item, refreshAction, openModal}: EventItemProps) => {
                                     target="_blank" 
                                 />
                             }
-                            <OpenEditAlertDialog 
+                            <AdminOpenDialog 
                                 IconElement={PencilIcon} 
                                 label="" 
                                 title="Editando um Evento" 
@@ -58,8 +61,9 @@ export const EventItem = ({item, refreshAction, openModal}: EventItemProps) => {
                         </div>
                     </TableCell>
                 </TableRow>
-            </TableBody>
-        </Table>
+            {/* </TableBody> */}
+        {/* </Table> */}
+        </>
     );
 }
 
