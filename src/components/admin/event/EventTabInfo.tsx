@@ -4,15 +4,12 @@ import { ErrorItem, getErrorFromZod } from "@/lib/getErrorFromZod";
 import { 
     Card, 
     CardContent, 
-    // CardDescription, 
     CardHeader, 
     CardTitle, 
-    // CardFooter 
 } from "@/components/ui/card";
 import { 
   Form, 
   FormControl, 
-  // FormDescription, 
   FormField, 
   FormItem, 
   FormLabel, 
@@ -174,7 +171,6 @@ export const TabInfoDialog = ({ event, refreshAction }: TabProps) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    // setLoading(true);
     clickAdd(values);
   }
 
@@ -204,13 +200,6 @@ export const TabInfoDialog = ({ event, refreshAction }: TabProps) => {
       refreshAction();
     }
   }
-
-  // const handleConfirmButton = async() => {
-  //     setLoading(true);
-  //     const eventItem = await deleteAdminEvent(event.id);
-  //     setLoading(false);
-  //     if (eventItem) { refreshAction(); }
-  // }
 
   return (
     <Card>
@@ -299,8 +288,7 @@ export const TabInfoDialog = ({ event, refreshAction }: TabProps) => {
                     />
                   </Card>
                 </Card>
-                
-            {/* </CardDescription> */}
+              {/* </CardDescription> */}
             <Card className="flex flex-row flex-1 items-center mt-6">
               {/* <ShowButton label="Resetar" onClick={refreshAction} /> */}
               {loading && <ButtonDisabled /> }
