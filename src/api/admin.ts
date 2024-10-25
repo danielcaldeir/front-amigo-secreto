@@ -1,6 +1,7 @@
 import { req } from "@/api/axios";
 import { Event } from "@/types/Event";
 import { Group } from "@/types/Group";
+import { People } from "@/types/People";
 import { getCookie } from "cookies-next";
 // import { cookies } from "next/headers";
 
@@ -191,12 +192,110 @@ async (id_event:number, id: number): Promise<true | false> => {
 // router.post('/peoples/:id_event/:id_group', auth.validate, people.addPeople);
 // router.put('/peoples/:id_event/:id_group/:id', auth.validate, people.updatePeople);
 // router.delete('/peoples/:id_event/:id_group/:id', auth.validate, people.deletePeople);
+export const getAdminPeoples = 
+async (id_event:number, id_group:number ): Promise<People[] | []> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.get('/admin/peoples/group/'+id_event+'/'+id_group, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return json.data.peoples as People[] ?? [];
+    } catch (error) {
+        return [];
+    }
+}
+
+export const getAdminAllPeoples = 
+async (id_event:number, id_group:number ): Promise<People[] | []> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.get('/admin/peoples/event/'+id_event, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return json.data.peoples as People[] ?? [];
+    } catch (error) {
+        return [];
+    }
+}
+
+export const getAdminOnePeople = 
+async (id_event:number, id_group:number, id:number ): Promise<People | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.get('/admin/peoples/'+id_event+'/'+id_group+'/'+id, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return json.data.peoples as People ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+
+export const getAdminPeopleID = 
+async (id_event:number, id:number ): Promise<People | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.get('/admin/peoples/id/'+id_event+'/'+id, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return json.data.peoples as People ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+
+export const getAdminPeopleCPF = 
+async (id_event:number, cpf:number ): Promise<People | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.get('/admin/peoples/cpf/'+id_event+'/'+cpf, {
+            headers: {'Authorization': `Token ${token}`}
+        });
+        return json.data.peoples as People ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+
+type AddPeopleData = {
+    name: string;
+    cpf: string;
+}
+
+export const addAdminPeople = 
+async (id_event:number, id_group:number, data: AddPeopleData): Promise<People | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.post('/admin/peoples/'+id_event+"/"+id_group, data, 
+            { headers: {'Authorization': `Token ${token}`} });
+        return json.data.people as People ?? false;
+    } catch (error) {
+        return false;
+    }
+}
+
+type UpdatePeopleData = {
+    name?: string;
+    cpf?: string;
+}
+
+export const updateAdminPeople = 
+async (id_event:number, id_group:number, id:number, data: UpdatePeopleData): Promise<People | false> => {
+    try {
+        const token = getCookie('token');
+        const json = await req.put('/admin/peoples/'+id_event+'/'+id_group+'/'+id, data, 
+            { headers: {'Authorization': `Token ${token}`} });
+        return json.data.people as People ?? false;
+    } catch (error) {
+        return false;
+    }
+}
 
 export const deleteAdminPeople = 
 async (id_event:number, id_group:number, id: number): Promise<true | false> => {
     try {
         const token = getCookie('token');
-        const json = await req.delete(`/peoples/${id_event}/${id_group}/${id}`, {
+        const json = await req.delete(`/admin/peoples/${id_event}/${id_group}/${id}`, {
             headers: {'Authorization': `Token ${token}`}
         });
         return !json.data.error;
