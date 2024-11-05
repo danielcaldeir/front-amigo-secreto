@@ -1,4 +1,4 @@
-import { addAdminGroup } from "@/api/admin";
+import { addAdminGroup, updateAdminGroup } from "@/api/admin";
 import { ErrorItem, getErrorFromZod } from "@/lib/getErrorFromZod";
 import { useState } from "react";
 import { z } from "zod";
@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LucideIcon } from "lucide-react";
+import { Event } from "@/types/Event";
+import { Group } from "@/types/Group";
 
 type AddProps = {
   id_event: number;
@@ -77,14 +79,16 @@ export const GroupADD = ({ id_event, refreshAction }: AddProps) => {
 
 type AddGroupDialogProps = {
   IconElement: LucideIcon;
-  id_event: number;
+  id_event?: number;
+  event: Event;
+  group: Group | null;
   label?: string;
   title?: string;
   onClick?: () => void;
   refreshAction: () => void;
 }
 
-export function OpenADDGroupDialog({IconElement, id_event, refreshAction}: AddGroupDialogProps) {
+export function OpenADDGroupDialog({IconElement, event, group, refreshAction}: AddGroupDialogProps) {
   const [nameField, setNameField] = useState('');
   const [loading, setLoading] = useState(false);
   // const [error, setError] = useState<ErrorItem[]>([]);
@@ -94,6 +98,9 @@ export function OpenADDGroupDialog({IconElement, id_event, refreshAction}: AddGr
       defaultValues: {
           nameField: "",
       },
+      values: {
+        nameField: (group)?group.name:"",
+      }
   });
 
   // 2. Define a submit handler.
@@ -101,7 +108,11 @@ export function OpenADDGroupDialog({IconElement, id_event, refreshAction}: AddGr
       // Do something with the form values.
       // ✅ This will be type-safe and validated.
       console.log(values);
-      clickAdd(values);
+      if (group) {
+        clickEdit(values);
+      } else {
+        clickAdd(values);
+      }
   }
 
   const clickAdd = async(data: z.infer<typeof formSchema>) => {
@@ -109,13 +120,35 @@ export function OpenADDGroupDialog({IconElement, id_event, refreshAction}: AddGr
       // const data = formSchema.safeParse({titleField, descriptionField, groupedField });
       // if (!data.success) { return(setError(getErrorFromZod(data.error))); }
       setLoading(true);
-      const eventItem = await addAdminGroup(id_event, {
+      const eventItem = await addAdminGroup(event.id, {
           name: data.nameField,
       });
       setLoading(false);
       if (eventItem) { refreshAction(); }
   }
   
+  const clickEdit = async(data: z.infer<typeof formSchema>) => {
+    // setError([]);
+    // const data = formSchema.safeParse({titleField, descriptionField, groupedField });
+    // if (!data.success) { return(setError(getErrorFromZod(data.error))); }
+    var updateGroup;
+    if (group) {
+      setLoading(true);
+      updateGroup = await updateAdminGroup(group.id_event, group.id, {
+          name: data.nameField,
+      });
+      setLoading(false);
+    } else {
+      updateGroup = false;
+    }
+    console.log(updateGroup);
+    if (updateGroup) { 
+      refreshAction(); 
+    } else {
+      alert('Nao foi possivel alterar o grupo!');
+    }
+  }
+
   return (
     <>
       <Card>

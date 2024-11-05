@@ -82,80 +82,74 @@ const formSchema = z.object({
   nameField: z.string().min(2, { message: "Preencha o titulo maior que 2 caracteres.", }).max(50),
 });
   
-export const OpenGroupEditDialog = ({ IconElement, event, group, refreshAction }: TabProps) => {
-    const [loading, setLoading] = useState(false);
-  
-    if(!event) return null;
-    if(!group) return null;
-  
-    // 1. Define your form.
-    const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-          nameField: group?.name,
-      },
-    });
-  
-    // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
-      // Do something with the form values.
-      // ✅ This will be type-safe and validated.
-      console.log(values);
-      // setLoading(true);
-      clickAdd(values);
-    }
-  
-    const clickAdd = async(data: z.infer<typeof formSchema>) => {
-      // setError([]);
-      // const data = formSchema.safeParse({titleField, descriptionField, groupedField });
-      // if (!data.success) { return(setError(getErrorFromZod(data.error))); }
-  
-      setLoading(true);
-      const updateGroup = await updateAdminGroup(group.id_event, group.id, {
-          name: data.nameField,
-      });
-      setLoading(false);
-      console.log(updateGroup);
-      if (updateGroup) { 
-        refreshAction(); 
-      } else {
-        alert('Nao foi possivel alterar o grupo!');
-      }
-    }
-  
-    return (
-      <Card>
-        {/* <CardContent className="flex flex-row flex-1 items-center mt-6"> */}
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              {/* <CardDescription > */}
-              <CardFooter>
-                <FormField 
-                    control={form.control} 
-                    name="nameField"
-                    render={({ field }) => ( 
-                      <FormItem> 
-                          <FormLabel>Novo Grupo</FormLabel> 
-                          <FormControl> 
-                          <Input 
-                              type="text" 
-                              placeholder="Digite o Titulo do Evento" 
-                              className="outline-none bg-gray-500 text-white" 
-                              {...field} /> 
-                          </FormControl> 
-                          {/* <FormDescription>This is your public display name.</FormDescription>  */}
-                          <FormMessage /> 
-                      </FormItem> 
-                    )} 
-                /> 
-                {loading && <ItemButtonDisabled /> }
-                {/* {!loading && <ShowButtonSubmit label="Adicionar" /> } */}
-                {!loading && <ItemButtonSubmit IconElement={IconElement} /> }
-              </CardFooter>
-              {/* </CardDescription> */}
-            </form>
-          </Form>
-        {/* </CardContent> */}
-      </Card>
-    );
-}
+// export const OpenGroupEditDialog = ({ IconElement, event, group, refreshAction }: TabProps) => {
+//     const [loading, setLoading] = useState(false);
+//     if(!event) return null;
+//     if(!group) return null;
+//     // 1. Define your form.
+//     const form = useForm<z.infer<typeof formSchema>>({
+//       resolver: zodResolver(formSchema),
+//       defaultValues: {
+//           nameField: group?.name,
+//       },
+//     });
+//     // 2. Define a submit handler.
+//     function onSubmit(values: z.infer<typeof formSchema>) {
+//       // Do something with the form values.
+//       // ✅ This will be type-safe and validated.
+//       console.log(values);
+//       // setLoading(true);
+//       clickAdd(values);
+//     }
+//     const clickAdd = async(data: z.infer<typeof formSchema>) => {
+//       // setError([]);
+//       // const data = formSchema.safeParse({titleField, descriptionField, groupedField });
+//       // if (!data.success) { return(setError(getErrorFromZod(data.error))); }
+//       setLoading(true);
+//       const updateGroup = await updateAdminGroup(group.id_event, group.id, {
+//           name: data.nameField,
+//       });
+//       setLoading(false);
+//       console.log(updateGroup);
+//       if (updateGroup) { 
+//         refreshAction(); 
+//       } else {
+//         alert('Nao foi possivel alterar o grupo!');
+//       }
+//     }
+//     return (
+//       <Card>
+//         {/* <CardContent className="flex flex-row flex-1 items-center mt-6"> */}
+//           <Form {...form}>
+//             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+//               {/* <CardDescription > */}
+//               <CardFooter>
+//                 <FormField 
+//                     control={form.control} 
+//                     name="nameField"
+//                     render={({ field }) => ( 
+//                       <FormItem> 
+//                           <FormLabel>Novo Grupo</FormLabel> 
+//                           <FormControl> 
+//                           <Input 
+//                               type="text" 
+//                               placeholder="Digite o Titulo do Evento" 
+//                               className="outline-none bg-gray-500 text-white" 
+//                               {...field} /> 
+//                           </FormControl> 
+//                           {/* <FormDescription>This is your public display name.</FormDescription>  */}
+//                           <FormMessage /> 
+//                       </FormItem> 
+//                     )} 
+//                 /> 
+//                 {loading && <ItemButtonDisabled /> }
+//                 {/* {!loading && <ShowButtonSubmit label="Adicionar" /> } */}
+//                 {!loading && <ItemButtonSubmit IconElement={IconElement} /> }
+//               </CardFooter>
+//               {/* </CardDescription> */}
+//             </form>
+//           </Form>
+//         {/* </CardContent> */}
+//       </Card>
+//     );
+// }

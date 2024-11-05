@@ -1,12 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useEffect, useState } from "react";
+import { 
+  // useEffect, 
+  useState 
+} from "react";
 import { Event } from "@/types/Event";
 import { getAdminGroup, getAdminGroups } from "@/api/admin";
 import { Group } from "@/types/Group";
 import { ShowWarning } from "@/components/helpers/AlertHelpers";
 import { GroupADD, OpenADDGroupDialog } from "@/components/admin/group/GroupAdd";
 import { GroupItem } from "@/components/admin/group/GroupItem";
-import { GroupEdit, OpenGroupEditDialog } from "@/components/admin/group/GroupEdit";
+import { 
+  GroupEdit, 
+  // OpenGroupEditDialog 
+} from "@/components/admin/group/GroupEdit";
 // import { useForm } from "react-hook-form";
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import { z } from "zod";
@@ -17,15 +23,20 @@ import { PencilIcon, SaveIcon } from "lucide-react";
 
 type TabProps = {
   event?: Event | undefined;
+  groups?: Group[] 
   refreshAction: () => void;
 }
 
-export const TabGroups = ({ event, refreshAction }: TabProps) => {
+export const TabGroups = ({ event, groups , refreshAction }: TabProps) => {
   const [loading, setLoading] = useState(false);
-  const [groups, setGroups] = useState<Group[]>([]);
+  // const [groups, setGroups] = useState<Group[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
   if(!event) return null;
+  if (!groups) return null;
+  const setGroups = (groupsList: Group[]) => {
+    groups = groupsList;
+  }
 
   const handleEditButton = async (group: Group) => {
     console.log("Selecionando o Grupo!!");
@@ -40,9 +51,9 @@ export const TabGroups = ({ event, refreshAction }: TabProps) => {
     setLoading(false);
   }
 
-  useEffect(() => {
-    loadGroups();
-  },[]);
+  // useEffect(() => {
+  //   loadGroups();
+  // },[]);
 
   return ( 
     <Card>
@@ -95,12 +106,16 @@ export const GroupItemNotFound = () => {
   );
 }
 
-export const TabGroupsDialog = ({ event, refreshAction }: TabProps) => {
+export const TabGroupsDialog = ({ event, groups, refreshAction }: TabProps) => {
   const [loading, setLoading] = useState(false);
-  const [groups, setGroups] = useState<Group[]>([]);
+  // const [groups, setGroups] = useState<Group[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
   if(!event) return null;
+  if (!groups) return null;
+  const setGroups = (groupsList: Group[]) => {
+    groups = groupsList;
+  }
 
   // const formSchema = z.object({
   //   titleField: z.string().min(2, { message: "Preencha o titulo maior que 2 caracteres.", }).max(50),
@@ -117,7 +132,6 @@ export const TabGroupsDialog = ({ event, refreshAction }: TabProps) => {
     if(oneGroup){
       console.log("Selecionando o Grupo!!");
       setSelectedGroup(oneGroup);
-      
     } else {
       console.log(selectedGroup);
       refreshAction();
@@ -134,9 +148,9 @@ export const TabGroupsDialog = ({ event, refreshAction }: TabProps) => {
     setLoading(false);
   }
 
-  useEffect(() => {
-    loadGroups();
-  },[]);
+  // useEffect(() => {
+  //   loadGroups();
+  // },[]);
 
   // const handleConfirmButton = async() => {
   //     setLoading(true);
@@ -150,9 +164,24 @@ export const TabGroupsDialog = ({ event, refreshAction }: TabProps) => {
       <CardHeader className="my-3 w-full flex flex-row items-center">
         {!selectedGroup && 
           // <GroupADD id_event={event.id} refreshAction={loadGroups}/>
-          <OpenADDGroupDialog IconElement={SaveIcon} id_event={event.id} refreshAction={loadGroups}/>
+          <OpenADDGroupDialog 
+            IconElement={SaveIcon} 
+            // id_event={event.id} 
+            event={event} 
+            group={selectedGroup}
+            refreshAction={loadGroups} 
+          />
         }
-        {selectedGroup && <OpenGroupEditDialog IconElement={PencilIcon} event={event} group={selectedGroup} refreshAction={loadGroups}/> }
+        {selectedGroup && 
+          <OpenADDGroupDialog 
+            IconElement={PencilIcon} 
+            // id_event={event.id} 
+            event={event} 
+            group={selectedGroup}
+            refreshAction={loadGroups} 
+          />
+          // <OpenGroupEditDialog IconElement={PencilIcon} event={event} group={selectedGroup} refreshAction={loadGroups}/> 
+        }
       </CardHeader>
       <CardContent className="w-full my-3 flex-row items-center">
       {/* <CardContent> */}

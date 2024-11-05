@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteAdminEvent, getAdminEvents } from "@/api/admin";
+import { deleteAdminEvent, getAdminEvents, getAdminGroups } from "@/api/admin";
 import { Event } from "@/types/Event";
 import { useEffect, useState } from "react";
 import { 
@@ -25,9 +25,11 @@ import { EventEdit } from "@/components/admin/event/EventEdit";
 import { PlusCircleIcon } from "lucide-react";
 import { ModalScreens } from "@/types/modalScreens";
 import { ModalDemo } from "@/components/util/ModalDemo";
+import { Group } from "@/types/Group";
 
 export const AdminPage = () => {
     const [events, setEvents] = useState<Event[]>([]);
+    const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState(true);
     const [modalScreen, setModalScreen] = useState<ModalScreens>(null);
     const [selectedEvent, setSelectedEvent] = useState<Event>();
@@ -47,12 +49,16 @@ export const AdminPage = () => {
     const editEvent = (event: Event, screens: ModalScreens) => {
       setSelectedEvent(event);
       setModalScreen(screens);
+      loadGroups(event.id);
     }
 
-    // const handleADDEvent = () => {
-    //   // const ping = await getAdminEvent(2);
-    //   console.log("Click ADD Event: ");
-    // }
+    const loadGroups = async (eventID: number) => {
+      // setSelectedGroup(null);
+      setLoading(true);
+      const groupList = await getAdminGroups(eventID);
+      setGroups(groupList);
+      setLoading(false);
+    }
 
     return(
         <section className="bg-gray-900 p-5 rounded text-white w-full">
@@ -96,7 +102,7 @@ export const AdminPage = () => {
                 <ModalDemo onClose={ ()=>setModalScreen(null) } >
                   {/* Tipo: {modalScreen} */}
                   {modalScreen == 'add' && <EventADD refreshAction={loadEvents} />}
-                  {modalScreen == 'edit' && <EventEdit event={selectedEvent} refreshAction={loadEvents} />}
+                  {modalScreen == 'edit' && <EventEdit event={selectedEvent} groups={groups} refreshAction={loadEvents} />}
                   {modalScreen == 'del' && <EventDel event={selectedEvent} refreshAction={loadEvents} />}
                 </ModalDemo>
               }
