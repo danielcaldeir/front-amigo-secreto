@@ -1,33 +1,38 @@
 "use client"
 
 import { Event } from "@/types/Event";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { 
   Card, 
   CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle, 
-  CardFooter 
 } from "@/components/ui/card";
-// import { ButtonDisabled, ItemButton, ShowButton, ShowButtonSubmit } from "@/components/helpers/ButtonHelpers";
-// import { Input } from "@/components/ui/input";
+import { ButtonDisabled, ShowButton, ShowButtonSubmit } from "@/components/helpers/ButtonHelpers";
+import { Input } from "@/components/ui/input";
 import { ModalTab } from "@/types/modalScreens";
 import { z } from "zod";
 import { TabInfo } from "@/components/admin/event/EventTabInfo";
 import { TabGroups } from "@/components/admin/group/GroupTabInfo";
 import { ShowWarning } from "@/components/helpers/AlertHelpers";
-import TabPeople, { PeopleTabInfo } from "@/components/admin/people/PeopleTabInfo";
+import { PeopleTabInfo } from "@/components/admin/people/PeopleTabInfo";
+import { Group } from "@/types/Group";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { updateAdminEvent } from "@/api/admin";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type EditProps = {
     event: Event | undefined;
+    groups: Group[] | undefined;
     refreshAction: () => void;
 }
 
-export const EventEdit = ({ event, refreshAction }: EditProps) => {
+export const EventEdit = ({ event, groups , refreshAction }: EditProps) => {
     const [tab, setTab] = useState<ModalTab>('info');
 
     if(!event) return null;
+    if (!groups) return null;
 
     return (
         <>
@@ -49,8 +54,8 @@ export const EventEdit = ({ event, refreshAction }: EditProps) => {
               </div>
               <div>
                 {tab === 'info'   && <TabInfo event={event} refreshAction={refreshAction} />}
-                {tab === 'groups' && <TabGroups event={event} refreshAction={refreshAction} />}
-                {tab === 'people' && <PeopleTabInfo event={event} refreshAction={refreshAction} />}
+                {tab === 'groups' && <TabGroups event={event} groups={groups} refreshAction={refreshAction} />}
+                {tab === 'people' && <PeopleTabInfo event={event} groups={groups} refreshAction={refreshAction} />}
               </div>
             </CardContent>
           </Card>
@@ -85,5 +90,154 @@ export const PeopleItemNotFound = () => {
       <div className="text-center py-4 ">
           <ShowWarning message="Nao ha Pessoas neste Grupo!!!"/>
       </div>
+  );
+}
+
+type EditAlertDialogProps = {
+  // IconElement: LucideIcon;
+  // label?: string;
+  event?: Event | undefined;
+  title: string;
+  // onClick?: () => void;
+  refreshAction: () => void;
+}
+
+export function ClickEditAlertDialog({ event, title, refreshAction}: EditAlertDialogProps) {
+  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState<ErrorItem[]>([]);
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+          titleField: "",
+          descriptionField: "",
+          groupedField: false,
+      },
+      values: {
+          titleField: (event)?event.title:"",
+          descriptionField: (event)?event.description:"",
+          groupedField: (event)?event.grouped:false,
+          statusField: (event)?event.status:false,
+      }
+  });
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+      // Do something with the form values.
+      // ✅ This will be type-safe and validated.
+      console.log(values);
+      clickEdit(values);
+  }
+
+  const clickEdit = async(data: z.infer<typeof formSchema>) => {
+      // setError([]);
+      // const data = formSchema.safeParse({titleField, descriptionField, groupedField });
+      // if (!data.success) { return(setError(getErrorFromZod(data.error))); }
+      setLoading(true);
+      const eventItem = await updateAdminEvent((event)?event.id:0 ,{
+          title: data.titleField,
+          description: data.descriptionField,
+          grouped: data.groupedField
+      });
+      setLoading(false);
+      if (eventItem) { refreshAction(); }
+  }
+  return (
+      <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <DialogHeader>
+                <DialogTitle>{title}</DialogTitle>
+                  <DialogDescription>
+                    <FormField 
+                        control={form.control} 
+                        name="titleField"
+                        render={({ field }) => ( 
+                            <FormItem> 
+                                <FormLabel>Titulo</FormLabel> 
+                                <FormControl> 
+                                <Input 
+                                    type="text" 
+                                    placeholder="Digite o Titulo do Evento" 
+                                    className="outline-none bg-gray-300 text-white" 
+                                    {...field} /> 
+                                </FormControl> 
+                                {/* <FormDescription>This is your public display name.</FormDescription>  */}
+                                <FormMessage /> 
+                            </FormItem> 
+                        )} 
+                    /> 
+                    <FormField 
+                        control={form.control}
+                        name="descriptionField"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Descrição</FormLabel>
+                                <FormControl>
+                                <Input 
+                                    type="text" 
+                                    placeholder="Digite a descrição do Evento" 
+                                    className="outline-none bg-gray-300 text-white" 
+                                    {...field} />
+                                </FormControl>
+                                {/* <FormDescription>This is your public display name.</FormDescription> */}
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Card className="flex flex-row mb-5 mt-3">
+                      <Card className="flex-1">
+                        <FormField 
+                            control={form.control}
+                            name="groupedField"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Checkbox 
+                                            checked={field.value} 
+                                            onCheckedChange={field.onChange} 
+                                        />
+                                        {/* <Input type="checkbox" checked={groupedField} className="w-20 h-6 mt-3" {...field} /> */}
+                                    </FormControl>
+                                    <FormLabel>Será Agrupado?</FormLabel>
+                                    {/* <FormDescription>This is your public display name.</FormDescription> */}
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                      </Card>
+                      <Card className="flex-1">
+                        <FormField 
+                            control={form.control}
+                            name="statusField"
+                            render={({ field }) => (
+                              <FormItem>
+                                  <FormLabel>Evento Liberado?</FormLabel>
+                                  <FormControl>
+                                      <Checkbox 
+                                          checked={field.value} 
+                                          onCheckedChange={field.onChange} 
+                                      />
+                                      {/* <Input type="checkbox" checked={groupedField} className="w-20 h-6 mt-3" {...field} /> */}
+                                  </FormControl>
+                                  {/* <FormDescription>This is your public display name.</FormDescription> */}
+                                  <FormMessage />
+                              </FormItem>
+                            )}
+                        />
+                      </Card>
+                    </Card>
+                  </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                  {/* <DialogClose asChild> */}
+                      {/* <ShowButton label="Resetar" onClick={refreshAction} /> */}
+                  {/* </DialogClose> */}
+                  {/* <AlertDialogCancel>Resetar</AlertDialogCancel> */}
+                  {/* <AlertDialogAction>Adicionar</AlertDialogAction> */}
+                  {loading && <ButtonDisabled /> }
+                  {!loading && <ShowButtonSubmit label="Salvar" /> }
+              </DialogFooter>
+          </form>
+      </Form>
   );
 }
