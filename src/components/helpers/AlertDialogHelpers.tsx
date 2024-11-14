@@ -15,45 +15,34 @@ import { LucideIcon } from "lucide-react";
 import { ItemButton } from "@/components/helpers/ButtonHelpers";
 import { People } from "@/types/People";
 
-type AlertDialogProps = {
-    IconElement: LucideIcon;
-    label?: string;
-    onClick?: () => void;
-}
+// type AlertDialogProps = {
+//     IconElement: LucideIcon;
+//     label?: string;
+//     onClick?: () => void;
+// }
 
-export function OpenModalAlertDialog({IconElement, label, onClick}: AlertDialogProps) {
-    const handleADDEvent = async() => {
-        const ping = await getAdminEvent(2);
-        console.log("ADD Event: "+ping);
-    }
-    
-    return (
-        <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <ItemButton IconElement={IconElement} onClick={onClick} label={label} />
-                {/* <Button variant="ghost" size="icon" className="cursor-pointer"> */}
-                {/* <div className="p-3 flex flex-col justify-center items-center gap-2 md:flex-row"> */}
-                    {/* <div><IconElement /></div> */}
-                    {/* {label && <div>{label}</div>} */}
-                {/* </div> */}
-                {/* </Button> */}
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Tem certeza que deseja excluir este Item?</AlertDialogTitle>
-                    {/* <AlertDialogDescription> */}
-                        {/* This action cannot be undone. This will permanently delete your */}
-                        {/* account and remove your data from our servers. */}
-                    {/* </AlertDialogDescription> */}
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleADDEvent}>Continue</AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
-    );
-}
+// export function OpenModalAlertDialog({IconElement, label, onClick}: AlertDialogProps) {
+//     const handleADDEvent = async() => {
+//         const ping = await getAdminEvent(2);
+//         console.log("ADD Event: "+ping);
+//     }
+//     return (
+//         <AlertDialog>
+//             <AlertDialogTrigger asChild>
+//                 <ItemButton IconElement={IconElement} onClick={onClick} label={label} />
+//             </AlertDialogTrigger>
+//             <AlertDialogContent>
+//                 <AlertDialogHeader>
+//                     <AlertDialogTitle>Tem certeza que deseja excluir este Item?</AlertDialogTitle>
+//                 </AlertDialogHeader>
+//                 <AlertDialogFooter>
+//                     <AlertDialogCancel>Cancel</AlertDialogCancel>
+//                     <AlertDialogAction onClick={handleADDEvent}>Continue</AlertDialogAction>
+//                 </AlertDialogFooter>
+//             </AlertDialogContent>
+//         </AlertDialog>
+//     );
+// }
 
 type AlertDialogEventProps = {
     IconElement: LucideIcon;
@@ -103,9 +92,11 @@ type AlertDialogPeopleProps = {
 export function OpenDelPeopleModal({IconElement, people, refreshAction, label, onClick}: AlertDialogPeopleProps) {
     const handleDelPeople = async() => {
         console.log("Handle Del People Item!!");
-        if (confirm('Tem certeza que deseja excluir este Evento?')) {
-            // await deleteAdminPeople(1,2,people.id);
-            refreshAction();
+        if( people.id_event && people.id_group ){
+            if (confirm('Tem certeza que deseja excluir este Evento?')) {
+                await deleteAdminPeople(people.id_event, people.id_group, people.id);
+                refreshAction();
+            }
         }
     }
     
