@@ -1,13 +1,13 @@
 'use client'
 
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { escapeCPF } from "@/lib/escapeCPF";
 import { useState } from "react";
-import { ButtonDisabled, ShowButton } from "../helpers/ButtonHelpers";
-import { ShowInformation, ShowWarning } from "../helpers/AlertHelpers";
+import { ButtonDisabled, ShowButton } from "@/components/helpers/ButtonHelpers";
+import { ShowInformation, ShowWarning } from "@/components/helpers/AlertHelpers";
 
 type Props = {
     onSearchButton: (cpf: string) => void;
