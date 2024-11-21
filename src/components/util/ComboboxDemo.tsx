@@ -1,8 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-
+import { 
+  Check, 
+  ChevronsUpDown, 
+  MoreHorizontal 
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,6 +21,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuGroup, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuShortcut, 
+  DropdownMenuSub, 
+  DropdownMenuSubContent, 
+  DropdownMenuSubTrigger, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu"
 
 const frameworks = [
   {
@@ -92,35 +108,6 @@ export function ComboboxDemo() {
     </Popover>
   )
 }
-
-
-// "use client"
-
-// import * as React from "react"
-// import { MoreHorizontal } from "lucide-react"
-
-// import { Button } from "@/components/ui/button"
-// import {
-//   Command,
-//   CommandEmpty,
-//   CommandGroup,
-//   CommandInput,
-//   CommandItem,
-//   CommandList,
-// } from "@/components/ui/command"
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuGroup,
-//   DropdownMenuItem,
-//   DropdownMenuLabel,
-//   DropdownMenuSeparator,
-//   DropdownMenuShortcut,
-//   DropdownMenuSub,
-//   DropdownMenuSubContent,
-//   DropdownMenuSubTrigger,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu"
 
 const labels = [
   "feature",
