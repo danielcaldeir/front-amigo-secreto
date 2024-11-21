@@ -268,7 +268,7 @@ async (id_event:number, id_group:number, data: AddPeopleData): Promise<People | 
         const token = getCookie('token');
         const json = await req.post('/admin/peoples/'+id_event+"/"+id_group, data, 
             { headers: {'Authorization': `Token ${token}`} });
-        return json.data.people as People ?? false;
+        return json.data.peoples as People ?? false;
     } catch (error) {
         return false;
     }

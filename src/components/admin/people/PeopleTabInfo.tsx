@@ -26,6 +26,8 @@ import { PeopleItem } from "@/components/admin/people/PeopleItem";
 import { Table, TableBody } from "@/components/ui/table";
 import { ComboboxDemo } from "@/components/util/ComboboxDemo";
 import { SelectComboBox } from "@/components/helpers/ComboBoxHelpers";
+import { OpenADDPeopleDialog, PeopleADD } from "@/components/admin/people/PeopleAdd";
+import { PencilIcon, SaveIcon } from "lucide-react";
 
 type TabPeopleProps = {
   event: Event | undefined;
@@ -81,11 +83,6 @@ export const PeopleTabInfo = ({ event, groups, refreshAction }: TabPeopleProps) 
     setGroups(groupList);
     setLoading(false);
   }
-  
-  // useEffect(() => {
-  //   loadGroups();
-  //   // loadPeoples();
-  // },[]);
 
   const loadPeoples = async (id_group: number) => {
     setSelectedPeople(null);
@@ -114,7 +111,7 @@ export const PeopleTabInfo = ({ event, groups, refreshAction }: TabPeopleProps) 
                   {/* <SelectGroup> */}
                     {/* <SelectLabel>Grupos</SelectLabel> */}
                   {groups.map( (item) => ( 
-                    <SelectItem value={String(item.id)}>{item.name}</SelectItem>
+                    <SelectItem key={item.id} value={String(item.id)}>{item.name}</SelectItem>
                   ) )}
                   {/* </SelectGroup> */}
                 </SelectContent>
@@ -139,16 +136,24 @@ export const PeopleTabInfo = ({ event, groups, refreshAction }: TabPeopleProps) 
               }
               {!loading && peoples.length == 0 && 
               <>
-                {!selectedPeople && <>add</>
-                // <PeopleADD id_event={event.id} refreshAction={loadGroups}/>
+                {!selectedPeople && 
+                  <PeopleADD 
+                    id_event={event.id} 
+                    id_group={selectedGroup.id} 
+                    refreshAction={loadPeoples} 
+                  />
                 }
                 <PeopleItemNotFound />
               </>
               }
               {!loading && peoples.length > 0 && 
               <>
-              {!selectedPeople && <>add</>
-              // <PeopleADD id_event={event.id} refreshAction={loadGroups}/>
+              {!selectedPeople && 
+                <PeopleADD 
+                  id_event={event.id} 
+                  id_group={selectedGroup.id} 
+                  refreshAction={loadPeoples} 
+                />
               }
               {selectedPeople && <>edit</>
               // <PeopleEdit event={event} group={selectedGroup} refreshAction={loadGroups}/>
@@ -171,13 +176,7 @@ export const PeopleTabInfo = ({ event, groups, refreshAction }: TabPeopleProps) 
         </CardContent>
     </Card>
         {/* <Card> */}
-        {/* <CardHeader> */}
-            {/* <CardTitle>TabPeople!</CardTitle> */}
-        {/* </CardHeader> */}
         {/* <CardContent> */}
-            {/* <div className="flex text-center border-b border-gray-500 cursor-pointer"> */}
-            {/* TabPeople Evento? */}
-            {/* </div> */}
             {/* <div className="flex flex-row items-center mt-6"> */}
                 {/* <ShowButton label="Cancelar" onClick={refreshAction} /> */}
                 {/* {loading && <ButtonDisabled /> } */}
@@ -202,31 +201,10 @@ export const TabPeopleDialog = ({ event, groups, refreshAction }: TabPeopleProps
     groups = groupsList;
   }
 
-  // const formSchema = z.object({
-  //   titleField: z.string().min(2, { message: "Preencha o titulo maior que 2 caracteres.", }).max(50),
-  //   descriptionField: z.string().min(2, { message: "Preencha a descrição maior que 2 caracteres.", }).max(50),
-  //   groupedField: z.boolean(),
-  //   statusField: z.boolean(),
-  // });
-
   const handleEditButton = async (people: People) => {
     console.log("Editando Item!!");
     setSelectedPeople(people);
   }
-
-  // const handleEditButton = async (group: Group) => {
-  //   setLoading(true);
-  //   const oneGroup = await getAdminGroup(event.id, group.id);
-  //   setLoading(false);
-  //   console.log(oneGroup);
-  //   if(oneGroup){
-  //     console.log("Selecionando o Grupo!!");
-  //     setSelectedGroup(oneGroup);
-  //   } else {
-  //     console.log(selectedGroup);
-  //     refreshAction();
-  //   }
-  // }
 
   const loadGroups = async () => {
     setSelectedGroup(null);
@@ -256,17 +234,12 @@ export const TabPeopleDialog = ({ event, groups, refreshAction }: TabPeopleProps
     loadPeoples(id);
   }
 
-  // const handleConfirmButton = async() => {
-  //     setLoading(true);
-  //     const eventItem = await deleteAdminEvent(event.id);
-  //     setLoading(false);
-  //     if (eventItem) { refreshAction(); }
-  // }
-
   return (
     <Card>
       <CardHeader className="my-3 w-full flex flex-row items-center">
         <CardTitle>{selectedGroup?.name}</CardTitle>
+      </CardHeader>
+      <CardContent className="w-full my-3 flex-row items-center">
         <CardDescription>
           { loading && <GroupItemPhaceholder /> }
           { !loading && groups.length == 0 && <GroupItemNotFound />}
@@ -274,42 +247,67 @@ export const TabPeopleDialog = ({ event, groups, refreshAction }: TabPeopleProps
           { !loading && groups.length > 0 && 
             <SelectComboBox groups={groups} refreshAction={setSelectedGroupID} />
           }
-          {/* { !loading && groups.length > 0 &&  */}
-            {/* groups.map( (item) => ( */}
-              {/* <GroupItem key={item.id} item={item} onEdit={handleEditButton} refreshAction={loadGroups} /> */}
-            {/* ) ) */}
-          {/* } */}
         </CardDescription>
-        {/* {!selectedGroup &&  */}
-          {/* <GroupADD id_event={event.id} refreshAction={loadGroups}/> */}
-          {/* <OpenADDGroupDialog IconElement={SaveIcon} event={event} group={selectedGroup} refreshAction={loadGroups} /> */}
-        {/* } */}
-        {/* {selectedGroup &&  */}
-          {/* <OpenADDGroupDialog IconElement={PencilIcon} event={event} group={selectedGroup} refreshAction={loadGroups} /> */}
-          {/* <OpenGroupEditDialog IconElement={PencilIcon} event={event} group={selectedGroup} refreshAction={loadGroups}/>  */}
-        {/* } */}
-      </CardHeader>
-      <CardContent className="w-full my-3 flex-row items-center">
-      {/* <CardContent> */}
-        {/* {!selectedGroup && <GroupADD id_event={event.id} refreshAction={loadGroups}/> } */}
-        {loading && 
-          <>
-            <PeopleItemPhaceholder />
-            <PeopleItemPhaceholder />
-          </>
+        {selectedGroup && 
+        <>
+          {loading && 
+            <>
+              <PeopleItemPhaceholder />
+              <PeopleItemPhaceholder />
+            </>
+          }
+          {!loading && peoples.length == 0 && 
+            <>
+              <OpenADDPeopleDialog 
+                IconElement={SaveIcon} 
+                id_event={event.id} 
+                id_group={selectedGroup.id} 
+                people={selectedPeople}
+                refreshAction={loadPeoples}
+              />
+              <PeopleItemNotFound />
+            </>
+          }
+          {!loading && peoples.length > 0 && 
+            <>
+            {!selectedPeople && 
+              <OpenADDPeopleDialog 
+                IconElement={SaveIcon}
+                id_event={event.id} 
+                id_group={selectedGroup.id} 
+                people={selectedPeople}
+                refreshAction={loadPeoples}
+              />
+            }
+            {selectedPeople && 
+              <OpenADDPeopleDialog 
+                IconElement={PencilIcon}
+                id_event={event.id} 
+                id_group={selectedGroup.id} 
+                people={selectedPeople} 
+                refreshAction={loadPeoples}
+              />
+            }
+            <div className="flex text-center border-b border-gray-500 cursor-pointer">
+              <Table className="border p-3 mb-3 flex flex-col items-center rounded md:flex-row">
+                <TableBody className="w-full items-center">
+                  {!loading && peoples.length > 0 && 
+                    peoples.map( (item) => (
+                      <PeopleItem 
+                        key={item.id} 
+                        item={item} 
+                        onEdit={handleEditButton} 
+                        refreshAction={loadGroups} 
+                      />
+                    ) )
+                  }
+                </TableBody>
+              </Table>
+            </div>
+            </>
+          }
+        </>
         }
-        {!loading && peoples.length == 0 && <PeopleItemNotFound />}
-        <div className="flex text-center border-b border-gray-500 cursor-pointer">
-            <Table className="border p-3 mb-3 flex flex-col items-center rounded md:flex-row">
-            <TableBody className="w-full items-center">
-              {!loading && peoples.length > 0 && 
-              peoples.map( (item) => (
-                  <PeopleItem key={item.id} item={item} onEdit={handleEditButton} refreshAction={loadGroups} />
-              ) )
-              }
-            </TableBody>
-            </Table>
-          </div>
       </CardContent>
     </Card>
   );
